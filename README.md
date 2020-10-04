@@ -1,2 +1,4 @@
 # Peace Keeper
- discord.js server bot
+A discord.js v12 bot.
+
+Fully operational.
