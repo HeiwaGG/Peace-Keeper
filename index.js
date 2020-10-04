@@ -1,10 +1,12 @@
-﻿const { token }  = require("./indiscriminate/config.json");
-const Discord = require("discord.js");
+﻿const Discord = require("discord.js");
 const fs = require("fs");
 const bot = new Discord.Client();
 bot.commands = new Discord.Collection();
 const certificationChannel = '726231376239788063'
-
+const { token }  = require("./indiscriminate/config.json");
+const racicalWords = require('./chat-filters/racicalWords.json')
+const linkWords = require('./chat-filters/linkWords.json')
+const toxicityWords = require('./chat-filters/toxicityWords.json')
 let xp = require("./indiscriminate/xp.json");
 
 // Command Handlers
@@ -177,6 +179,68 @@ bot.on("message", async message => {
   let commandfile = bot.commands.get(cmd.slice(prefix.length));
   if(commandfile) commandfile.run(bot,message,args);
 
+});
+
+// Words filters
+bot.on('message', message => {
+
+  // Conststants setup
+  const icon = 'https://i.dlpng.com/static/png/6658651_preview.png'
+  
+  const racicalEmbed = new Discord.MessageEmbed()
+    .setTitle('error!')
+    .setDescription('Do not say any racial slurs.')
+    .addField('If you continue doing such you will be punished!', "We do not take toxicity lightly.")
+    .setColor('FF6961')
+    .setThumbnail(icon)
+    .setTimestamp()
+    .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+  ;
+   const toxicityEmbed = new Discord.MessageEmbed()
+    .setTitle('error!')
+    .setDescription('Do not say such offensive words.')
+    .addField('If you continue doing such you will be punished!', "We do not take toxicity lightly.")
+    .setColor('FF6961')
+    .setThumbnail(icon)
+    .setTimestamp()
+    .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+  ;
+    const linksEmbed = new Discord.MessageEmbed()
+    .setTitle('error!')
+    .setDescription('Do not post any links.')
+    .addField('If you continue doing such you will be punished!', "Read up on our rules here: https://heiwa.gg/rules")
+    .setColor('FF6961')
+    .setThumbnail(icon)
+    .setTimestamp()
+    .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+  ;
+
+  // Checks for racial slurs
+  for (x = 0; x < racicalWords.length; x++) {
+    if(message.content.includes(racicalWords[x])) {
+      message.delete();
+      message.channel.send(racicalEmbed).then(msg => msg.delete({timeout: 8500}))
+      return;
+    }   
+  }
+
+  // Checks for toxicity
+  for (z = 0; z < toxicityWords.length; z++) {
+    if(message.content.includes(toxicityWords[z])) {
+      message.delete();
+      message.channel.send(toxicityEmbed).then(msg => msg.delete({timeout: 8500}))
+      return;
+    }
+  }
+
+  // Checks for links
+  for (y = 0; y < linkWords.length; y++) {
+    if(message.content.includes(linkWords[y])) {
+      message.delete();
+      message.channel.send(linksEmbed).then(msg => msg.delete({timeout: 8500}))
+      return;
+    }
+  }
 });
 
 
