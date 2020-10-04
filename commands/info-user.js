@@ -1,0 +1,36 @@
+const Discord = require("discord.js");
+
+module.exports.run = async (bot, message, args) => {
+   // Restricts commands to bot commands channels
+   let botCommandsChannel = message.guild.channels.cache.find(channel => channel.name === "bot-commands")
+   const wrongChannelEmbed = new Discord.MessageEmbed()
+   .setColor('#FF6961')
+   .setTitle("error!")
+   .setDescription("Wrong channel!")
+   .addField("Please keep discord bot usage in the correct channel:", "<#750998349276250123>")
+   .setTimestamp()
+   .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+   if(message.channel != botCommandsChannel) {
+    message.delete()
+    message.channel.send(wrongChannelEmbed).then(msg => msg.delete({timeout: 7000}));
+   }
+    else {
+
+    message.delete().catch();
+    let user = message.mentions.users.first() || message.author;
+    let embed = new Discord.MessageEmbed()
+    .setAuthor(`${user.tag}'s Info`, user.displayAvatarURL({dynamic: true, size: 1024}))
+    .setThumbnail(user.displayAvatarURL({dynamic: true, size: 1024}))
+    .setColor('#ABDFF2')
+    .addField('Member:', message.author.tag, true)
+    .addField('Precense:', user.presence.status, true)
+    .addField('Bot?', user.bot, true)
+    .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL())
+    .setTimestamp()
+    message.channel.send(embed).then(msg => msg.delete({timeout: 8000}));
+}
+}
+module.exports.help = {
+  name: "uinfo"
+}
+
