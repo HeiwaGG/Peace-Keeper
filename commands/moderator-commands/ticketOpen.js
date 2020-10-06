@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
 
-    // Restricts commands to bot commands channels
+   // Restricts commands to bot commands channels
    const botCommandsResChannel = "750998349276250123"
    const wrongChannelEmbed = new Discord.MessageEmbed()
    .setColor('#FF6961')
@@ -23,8 +23,6 @@ module.exports.run = async (bot, message, args) => {
     let ticketLocation = `${'#ticket-' + message.author.username}`
     let ticketargs = args.slice(0).join(" ").split('|');
     const ticketReason = ticketargs[0]
-
-    let everyoneRole = "725636740232249366"
 
     // Error Embed due to no reason provided
     var embedCreateNoReasonTicket = new Discord.MessageEmbed()
@@ -72,7 +70,7 @@ module.exports.run = async (bot, message, args) => {
             .addField("Opened By:", `<@${message.author.id}>`, true)
             .addField("Ticket Reason:", ticketReason , true)
             .addField("__Be warned!__", "We do not take harrassment lightly, if you act malicous in any form towards staff, the ticket will be closed and you might be punished.")
-            .addField("Note:", "*To get this chat's transcript, please allow messages from this server. If unsure on how to turn this on, ask staff here on how to do this.*")
+            .addField("Note:", "*To get this chat's transcript, please allow direct messages from this server.\nIf unsure on how to turn this on, ask staff here on how to do this.*")
             .setTimestamp()
             .setFooter("Peace Keeper");
             settedParent.send(`<@&${StaffPing}>`)
