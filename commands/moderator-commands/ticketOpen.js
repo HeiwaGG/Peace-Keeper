@@ -5,13 +5,17 @@ module.exports.run = async (bot, message, args) => {
    // Restricts commands to bot commands channels
    const botCommandsResChannel = "750998349276250123"
    const wrongChannelEmbed = new Discord.MessageEmbed()
-   .setColor('#FF6961')
-   .setTitle("error!")
-   .setDescription("Wrong channel!")
-   .addField("Please keep discord bot usage in the correct channel:", "<#750998349276250123>")
-   .setTimestamp()
-   .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
-   if(message.channel != botCommandsResChannel) return message.channel.send(wrongChannelEmbed).then(msg => msg.delete({timeout: 7000}));
+     .setColor('#FF6961')
+     .setTitle("error!")
+     .setDescription("Wrong channel!")
+     .addField("Please keep discord bot usage in the correct channel:", "<#750998349276250123>")
+     .setTimestamp()
+     .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+     if(message.channel != botCommandsResChannel) {
+         message.delete()
+         message.channel.send(wrongChannelEmbed).then(msg => msg.delete({timeout: 7000}));
+         return;
+     };
     
    // Setups 
     const categoryID = "730413542653820958";
@@ -39,8 +43,7 @@ module.exports.run = async (bot, message, args) => {
     const newTicketErrEmbed = new Discord.MessageEmbed()
     .setColor('FF6961')
     .setTitle("**error!**")
-    .setDescription("You currently have a ticket open.")
-    .addField("Don't make a new ticket till the current one is closed.")
+    .addField("You currently have a ticket open.", "Don't make a new ticket till the current one is closed.")
     .setTimestamp()
     .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
     if(guild.channels.cache.find(channel => channel.name === "ticket-" + message.author.username)) return message.channel.send(newTicketErrEmbed);
