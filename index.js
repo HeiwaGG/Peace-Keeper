@@ -2,14 +2,13 @@
 const fs = require("fs");
 const bot = new Discord.Client();
 bot.commands = new Discord.Collection();
-const certificationChannel = '726231376239788063'
-const { token }  = require("./indiscriminate/config.json");
+const { prefix, token }  = require("./indiscriminate/config.json");
 const racicalWords = require('./chat-filters/racicalWords.json')
 const linkWords = require('./chat-filters/linkWords.json')
 const toxicityWords = require('./chat-filters/toxicityWords.json')
 let xp = require("./indiscriminate/xp.json");
 
-// Command Handlers
+// File Loaders
 fs.readdir("./commands/", (err, files) => {
 
   if(err) console.log(err);
@@ -45,8 +44,20 @@ fs.readdir("./commands/moderator-commands/", (err, files) => {
 
 });
 
-// Logging members who have joined
-bot.on('guildMemberAdd', (member) => {
+// Command Hanlders
+bot.on('message', message => {
+  let messageArray = message.content.split(" ");
+  let cmd = messageArray[0];
+  let args = messageArray.slice(1);
+  let commandfile = bot.commands.get(cmd.slice(prefix.length));
+
+  if(!message.content.startsWith(prefix)) return;
+  if(commandfile) commandfile.run(bot,message,args);
+})
+
+// Server Logs
+  // Logging members who have joined
+  bot.on('guildMemberAdd', (member) => {
   let logChannel = message.guild.channels.cache.get('726648800743260211')
   if (!logChannel) return undefined;
   let joinEmbed = new Discord.MessageEmbed()
@@ -62,8 +73,8 @@ bot.on('guildMemberAdd', (member) => {
   logChannel.send(joinEmbed);
 });
 
-// Logging memebers who have left
-bot.on('guildMemberRemove', (member) => {
+  // Logging memebers who have left
+  bot.on('guildMemberRemove', (member) => {
   let logChannel = message.guild.channels.cache.get('726648800743260211')
   if (!logChannel) return undefined;
   let leaveEmbed = new Discord.MessageEmbed()
@@ -79,8 +90,8 @@ bot.on('guildMemberRemove', (member) => {
   logChannel.send(leaveEmbed);
 });
 
-// Logging messages that have been editied
-bot.on('messageUpdate', async(oldMessage, newMessage) => {
+  // Logging messages that have been editied
+  bot.on('messageUpdate', async(oldMessage, newMessage) => {
   if(oldMessage.content === newMessage.content){
     return;
   }
@@ -100,8 +111,8 @@ bot.on('messageUpdate', async(oldMessage, newMessage) => {
   logChannel.send(editEmbed);
 });
 
-// Logging messages that have been deleted
-bot.on('messageDelete', async message => {
+  // Logging messages that have been deleted
+  bot.on('messageDelete', async message => {
   await (`10`)
   let deleteEmbed = new Discord.MessageEmbed()
   .setTitle("**A message was deleted...**")
@@ -117,7 +128,6 @@ bot.on('messageDelete', async message => {
 
   logChannel.send(deleteEmbed);
 });
-
 
 // XP related scripts
 bot.on("message", async message => {
@@ -168,17 +178,6 @@ bot.on("message", async message => {
   fs.writeFile("./indiscriminate/xp.json", JSON.stringify(xp), (err) => {
     if(err) console.log(err)
   });
-
-  let prefix = "!";
-
-  if(!message.content.startsWith(prefix)) return;
-  let messageArray = message.content.split(" ");
-  let cmd = messageArray[0];
-  let args = messageArray.slice(1);
-
-  let commandfile = bot.commands.get(cmd.slice(prefix.length));
-  if(commandfile) commandfile.run(bot,message,args);
-
 });
 
 // Words filters
@@ -242,7 +241,6 @@ bot.on('message', message => {
     }
   }
 });
-
 
 // Confirming the bot is running and is changing the status of it on discord
 bot.on('ready', () => {
