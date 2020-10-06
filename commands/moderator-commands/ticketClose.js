@@ -14,7 +14,6 @@ function rightColor(c) {
     }
     return '';
 }
-
 function correctTime(timestamp) {
 
     const mainTime = new Date(timestamp);
@@ -38,38 +37,63 @@ module.exports.run = async (bot, message, args) => {
 
     let cooldown = new Set();
 
-    const ticketOwner = bot.users.cache.get(message.channel.topic);
-    
-    /// const setup
-    const noPermsErrEmbed = new Discord.MessageEmbed()
+    const closeErrEmbed = new Discord.MessageEmbed()
     .setColor('FF6961')
     .setTitle("**error!**")
-    .setDescription("This command can only be used by staff!")
-    .setTimestamp()
+    .setDescription("use the correct format: !tclose <reason>")
     .setFooter("Peace Keeper")
-    /// const setup
+    if(!args[0]) return message.reply(closeErrEmbed);
+
+    const ticketOwner = bot.users.cache.get(message.channel.topic);
+    const logChannel = message.guild.channels.cache.find(channel => channel.name === "ticket-logs");
+    const reasonMsg = message.content.split(" ").slice(1).join(" ");
+    let transFile = `./indiscriminate/transcripts/${message.channel.name}.html`;
+
+    const DMembedTicketClose = new Discord.MessageEmbed()
+        .setTitle("**Tickets**")
+        .setColor('#007FBD')
+        .setDescription("Your ticket has been closed!")
+        .addField("Ticket Name; ", "#" + message.channel.name, true)
+        .addField("Closed by; ", `<@${message.author.id}>`, true)
+        .addField("Reason for closing; ", reasonMsg, true)
+        .addField("Below is your ticket's transcript: ", "Keep in mind that this message will only log the last 100 messages,\nthis is done in order to standby discord regulations.")
+        .setTimestamp()
+        .setThumbnail(servericon)
+        .setFooter("Peace Keeper")
+    ;
+
+    const LogChannelEmbedTicketClose = new Discord.MessageEmbed()
+        .setTitle("**Closed Tickets**")
+        .setColor('#007FBD')
+        .setDescription("A ticket has been closed!")
+        .addField("Ticket Name:", "#" + message.channel.name, true)
+        .addField("Closed by:", `<@${message.author.id}>`, true)
+        .addField("Reason for closing:", reasonMsg, true)
+        .setTimestamp()
+        .setThumbnail(`https://i.imgur.com/foKcByT.png`)
+        .setFooter("Peace Keeper");
+    ;
+    
+    const noPermsErrEmbed = new Discord.MessageEmbed()
+        .setColor('FF6961')
+        .setTitle("**error!**")
+        .setDescription("This command can only be used by staff!")
+        .setTimestamp()
+        .setFooter("Peace Keeper")
+    ;
 
     if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
     
-    /// const setup
     const ticketChanErrEmbed = new Discord.MessageEmbed()
-    .setColor('FF6961')
-    .setTitle("**error!**")
-    .setDescription("This command can only be used inside ticket channels!")
-    .setTimestamp()
-    .setFooter("Peace Keeper")
-    /// const setup
+        .setColor('FF6961')
+        .setTitle("**error!**")
+        .setDescription("This command can only be used inside ticket channels!")
+        .setTimestamp()
+        .setFooter("Peace Keeper")
+    ;
 
     if(message.channel.parentID != categoryID) return message.channel.send(ticketChanErrEmbed).then(msg => msg.delete({timeout: 5000}));
 
-    if(!args[0]) {
-        const closeErrEmbed = new Discord.MessageEmbed()
-        .setColor('FF6961')
-        .setTitle("**error!**")
-        .setDescription("use the correct format: !tclose <reason>")
-        .setFooter("Peace Keeper")
-        message.reply(closeErrEmbed);
-    }
 
     let messages = new Discord.Collection();
         let channelMessages = await message.channel.messages.fetch({ limit: 100 }).catch(err => console.log(err));
@@ -82,8 +106,9 @@ module.exports.run = async (bot, message, args) => {
             if (channelMessages)
                 messages = messages.concat(channelMessages);
             maxcatch++;
-        }
+    }
 
+    // CSS Formating (Don't touch)
     const today = new Date();
     let html = `<!doctype html>
     <html lang="en">
@@ -734,11 +759,9 @@ module.exports.run = async (bot, message, args) => {
             }
         }
 
-
         html += usedcontent;
 
         let msgDate = new Date();
-
         if (msg.editedTimestamp) {
             html += `<span class="chatlog__edited-timestamp" title="${correctTime(msg.editedTimestamp)}">(edited)</span>`
         }
@@ -859,7 +882,6 @@ module.exports.run = async (bot, message, args) => {
             </div>`
 
         }
-
         html += `</div>
         </div>
         </div>`
@@ -867,47 +889,24 @@ module.exports.run = async (bot, message, args) => {
     html += `</div>
         </body>
     </html>`
-
     fs.writeFile(`./indiscriminate/transcripts/` + message.channel.name + ".html", html, "utf8", err => {
         if (err) throw err;
     });
 
-    // Get transcript file location, then post to the chat.
-    let transFile = `./indiscriminate/transcripts/${message.channel.name}.html`;
 
-    const reasonMsg = message.content.split(" ").slice(1).join(" ");
-        
-        const LogChannelEmbedTicketClose = new Discord.MessageEmbed()
-        .setTitle("**Closed Tickets**")
-        .setColor('#007FBD')
-        .setDescription("A ticket has been closed!")
-        .addField("Ticket Name:", "#" + message.channel.name, true)
-        .addField("Closed by:", `<@${message.author.id}>`, true)
-        .addField("Reason for closing:", reasonMsg, true)
-        .setTimestamp()
-        .setThumbnail(`https://i.imgur.com/foKcByT.png`)
-        .setFooter("Peace Keeper");
+    if(!logChannel) return message.channel.send("Logging channel does not exist!");
 
-        const logChannel = message.guild.channels.cache.find(channel => channel.name === "ticket-logs");
-        if(!logChannel) return message.channel.send("Logging channel does not exist!");
-        logChannel.send(LogChannelEmbedTicketClose);
-        logChannel.send('', { files: [transFile] });
-
-        const DMembedTicketClose = new Discord.MessageEmbed()
-         .setTitle("**Tickets**")
-         .setColor('#007FBD')
-         .setDescription("Your ticket has been closed!")
-         .addField("Ticket Name; ", "#" + message.channel.name, true)
-         .addField("Closed by; ", `<@${message.author.id}>`, true)
-         .addField("Reason for closing; ", reasonMsg, true)
-         .setTimestamp()
-         .setThumbnail(servericon)
-         .setFooter("Peace Keeper")
-        ticketOwner.send(DMembedTicketClose);
-        ticketOwner.send('', { files: [transFile] });
-        setTimeout(() => {cooldown.delete(ticketOwner.id)}, 180);
-        message.channel.delete();
-        
+    // Sending logs to #ticket-logs
+    logChannel.send(LogChannelEmbedTicketClose);
+    logChannel.send('', { files: [transFile] });
+    // Sending logs to the ticker opener, if the channel topic didn't get set then it'll just delete the channel
+    if(!ticketOwner) return message.channel.delete();
+    ticketOwner.send(DMembedTicketClose);
+    ticketOwner.send('', { files: [transFile] });
+    
+    
+    setTimeout(() => {cooldown.delete(ticketOwner.id)}, 270);
+    message.channel.delete(); 
     }
  
 module.exports.help = {
