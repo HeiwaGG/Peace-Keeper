@@ -14,10 +14,8 @@ module.exports.run = async (bot, message, args) => {
     message.delete()
     message.channel.send(wrongChannelEmbed).then(msg => msg.delete({timeout: 7000}));
    }
-    else {
-
-    message.delete().catch();
-    let user = message.mentions.users.first() || message.author;
+   if(user)
+    message.delete()
     let embed = new Discord.MessageEmbed()
     .setAuthor(`${user.tag}'s Info`, user.displayAvatarURL({dynamic: true, size: 1024}))
     .setThumbnail(user.displayAvatarURL({dynamic: true, size: 1024}))
@@ -28,7 +26,7 @@ module.exports.run = async (bot, message, args) => {
     .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL())
     .setTimestamp()
     message.channel.send(embed).then(msg => msg.delete({timeout: 8000}));
-}
+
 }
 module.exports.help = {
   name: "uinfo"

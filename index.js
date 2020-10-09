@@ -2,11 +2,10 @@
 const fs = require("fs");
 const bot = new Discord.Client();
 bot.commands = new Discord.Collection();
-const { prefix, token }  = require("./indiscriminate/config.json");
-const racicalWords = require('./chat-filters/racicalWords.json')
-const linkWords = require('./chat-filters/linkWords.json')
-const toxicityWords = require('./chat-filters/toxicityWords.json')
-let xp = require("./indiscriminate/xp.json");
+
+  const { prefix, token }  = require("./indiscriminate/config.json");
+  const racicalWords = require('./chat-filters/racicalWords.json');
+  const toxicityWords = require('./chat-filters/toxicityWords.json');
 
 // File Loaders
 fs.readdir("./commands/", (err, files) => {
@@ -58,8 +57,8 @@ bot.on('message', message => {
 // Server Logs
   // Logging members who have joined
   bot.on('guildMemberAdd', (member) => {
-  let logChannel = message.guild.channels.cache.get('726648800743260211')
-  if (!logChannel) return undefined;
+    let logChannel = message.guild.channels.cache.find(channel => channel.name === 'bot-peacekeeper-logger')
+    if (!logChannel) return undefined;
   let joinEmbed = new Discord.MessageEmbed()
   .setTitle("**A user has joined the discord...**")
   .setDescription(`<@${member.user.id}>` + " joined the discord.")
@@ -75,7 +74,7 @@ bot.on('message', message => {
 
   // Logging memebers who have left
   bot.on('guildMemberRemove', (member) => {
-  let logChannel = message.guild.channels.cache.get('726648800743260211')
+  let logChannel = member.guild.channels.cache.find(channel => channel.name === 'bot-peacekeeper-logger')
   if (!logChannel) return undefined;
   let leaveEmbed = new Discord.MessageEmbed()
   .setTitle("**A user has left the discord...**")
@@ -105,9 +104,8 @@ bot.on('message', message => {
   .setFooter(`Peace Keeper`)
   .setColor('#E3E3E3')
   
-  let logChannel = oldMessage.guild.channels.cache.get('726648800743260211')
+  let logChannel = oldMessage.guild.channels.cache.find(channel => channel.name === 'bot-peacekeeper-logger')
   if(!logChannel) return;
-
   logChannel.send(editEmbed);
 });
 
@@ -123,61 +121,10 @@ bot.on('message', message => {
   .setFooter(`Peace Keeper`)
   .setColor('#E3E3E3')
   
-  let logChannel = message.guild.channels.cache.get('726648800743260211')
+  let logChannel = message.guild.channels.cache.find(channel => channel.name === 'bot-peacekeeper-logger')
   if(!logChannel) return;
-
-  logChannel.send(deleteEmbed);
-});
-
-// XP related scripts
-bot.on("message", async message => {
   if(message.author.bot) return;
-  if(message.channel.type === "dm") return;
-
-  let xpAdd = Math.floor(Math.random() * 7) + 8;
-
-  if(!xp[message.author.id]) {
-    xp[message.author.id] = {
-      xp: 0,
-      level: 1
-    };
-  }
-
-  
-  let curxp = xp[message.author.id].xp;
-  let curlvl = xp[message.author.id].level;
-  let nxtLvl = xp[message.author.id].level * 300;
-  xp[message.author.id].xp = curxp + xpAdd;
-  if(nxtLvl <= xp[message.author.id].xp) {
-    xp[message.author.id].level = curlvl + 1;
-
-    let levelChannel = message.guild.channels.cache.get('726648800743260211')
-
-
-    if(!levelChannel) {
-      const lvlChanNotFoundEmbed = new Discord.MessageEmbed()
-      .setColor('##FF6961')
-      .setTitle("**error!**")
-      .setDescription("Level logging channel not found! \n Please create a new channel called `levels` to log all level ups!")
-      .setFooter("Peace Keeper")
-      message.channel.send(lvlChanNotFoundEmbed);
-    } else {
-        if(levelChannel) {
-        let lvlUpMsgEmbed = new Discord.MessageEmbed()
-        .setColor('#ABDFF2')
-        .setTitle("**"+ message.author.tag +"**")
-        .setThumbnail(message.author.displayAvatarURL({dynamic: true, size: 1024}))
-        .addField("**Leveled up to:**", curlvl + 1)
-        .setTimestamp()
-        .setFooter(`Peace Keeper`);
-      levelChannel.send(lvlUpMsgEmbed);
-    }
-    }
-  }
-
-  fs.writeFile("./indiscriminate/xp.json", JSON.stringify(xp), (err) => {
-    if(err) console.log(err)
-  });
+  logChannel.send(deleteEmbed);
 });
 
 // Words filters
@@ -221,8 +168,7 @@ bot.on('message', message => {
       message.channel.send(racicalEmbed).then(msg => msg.delete({timeout: 8500}))
       return;
     }   
-  }
-
+  };
   // Checks for toxicity
   for (z = 0; z < toxicityWords.length; z++) {
     if(message.content.includes(toxicityWords[z])) {
@@ -230,16 +176,7 @@ bot.on('message', message => {
       message.channel.send(toxicityEmbed).then(msg => msg.delete({timeout: 8500}))
       return;
     }
-  }
-
-  // Checks for links
-  for (y = 0; y < linkWords.length; y++) {
-    if(message.content.includes(linkWords[y])) {
-      message.delete();
-      message.channel.send(linksEmbed).then(msg => msg.delete({timeout: 8500}))
-      return;
-    }
-  }
+  };
 });
 
 // Confirming the bot is running and is changing the status of it on discord

@@ -14,6 +14,8 @@ module.exports.run = async (bot, message, args) => {
     .addField("Usage:", "!dkick `<@user>` <reason>")
     .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
 
+    if(!kickedUser) return message.reply(noUserErrEmbed).then(msg => msg.delete({timeout: 5000}));
+
     const noPermsErrEmbed = new Discord.MessageEmbed()
     .setColor('FF6961')
     .setTitle("**error!**")
@@ -46,7 +48,6 @@ module.exports.run = async (bot, message, args) => {
 
     if(message.content.startsWith ("!dkick")) {
         if(!message.member.hasPermission("KICK_MEMBERS")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
-        if(!kickedUser) return message.reply(noUserErrEmbed).then(msg => msg.delete({timeout: 5000}));
         kickedUser.send(kickEmbed).then(() => { 
             message.mentions.members.first().kick(kickedUser, {reason: mentionMessage})});
         logChannel.send(kickLogEmbed);

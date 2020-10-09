@@ -36,26 +36,41 @@ module.exports.run = async (bot, message, args) => {
 
     let ticketOwner = bot.users.cache.get(message.channel.topic);
 
-    /// const setup
     const noPermsErrEmbed = new Discord.MessageEmbed()
     .setColor('FF6961')
     .setTitle("**error!**")
     .setDescription("This command can only be used by staff!")
     .setTimestamp()
     .setFooter("Peace Keeper")
-    /// const setup
-
     if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
-    
 
+    const usage = new Discord.MessageEmbed()
+    .setColor('FF6961')
+    .setTitle("**error!**")
+    .addField("Usage", "`!transcript <number>`")
+    .addField("Note: Due to discord API limitation: ", "*You can't collat more than 100 messages at a time!*")
+    .setTimestamp()
+    .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+    if(!args[0]) return message.reply(usage).then(msg => msg.delete({timeout: 5000}));
+    if(isNaN(args[0])) return message.reply(usage).then(msg => msg.delete({timeout: 8000}));
+
+    const limitErrEmbed = new Discord.MessageEmbed()
+    .setColor('FF6961')
+    .setTitle("**error!**")
+    .setDescription("You can't collat more than 100 messages!")
+    .setTimestamp()
+    .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+    if(args[0] > 100) return message.reply(limitErrEmbed).then(msg => msg.delete({timeout: 5000}));
+
+    
     let messages = new Discord.Collection();
-        let channelMessages = await message.channel.messages.fetch({ limit: 100 }).catch(err => console.log(err));
+        let channelMessages = await message.channel.messages.fetch({ limit: args[0] }).catch(err => console.log(err));
         messages = messages.concat(channelMessages);
         let maxcatch = 0
-        while (channelMessages.size === 100) {
+        while (channelMessages.size === args[0]) {
             if (maxcatch == 4) break;
             let lastMessageId = channelMessages.lastKey();
-            channelMessages = await message.channel.messages.fetch({ limit: 100, before: lastMessageId }).catch(err => console.log(err));
+            channelMessages = await message.channel.messages.fetch({ limit: args[0], before: lastMessageId }).catch(err => console.log(err));
             if (channelMessages)
                 messages = messages.concat(channelMessages);
             maxcatch++;
@@ -65,7 +80,7 @@ module.exports.run = async (bot, message, args) => {
     let html = `<!doctype html>
     <html lang="en">
         <head>
-        <title>Closed Ticket</title>
+        <title>Transcript</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
@@ -73,31 +88,31 @@ module.exports.run = async (bot, message, args) => {
             
             @font-face {
                 font-family: Whitney;
-                src: url(https://discordapp.com/assets/6c6374bad0b0b6d204d8d6dc4a18d820.woff);
+                src: url(https://github.com/AllThingsSmitty/fonts/blob/master/HelveticaNeue/helveticaneue.woff);
                 font-weight: 300;
             }
             
             @font-face {
                 font-family: Whitney;
-                src: url(https://discordapp.com/assets/e8acd7d9bf6207f99350ca9f9e23b168.woff);
+                src: url(https://github.com/AllThingsSmitty/fonts/blob/master/HelveticaNeue/helveticaneue.woff);
                 font-weight: 400;
             }
             
             @font-face {
                 font-family: Whitney;
-                src: url(https://discordapp.com/assets/3bdef1251a424500c1b3a78dea9b7e57.woff);
+                src: url(https://github.com/AllThingsSmitty/fonts/blob/master/HelveticaNeue/helveticaneue.woff);
                 font-weight: 500;
             }
             
             @font-face {
                 font-family: Whitney;
-                src: url(https://discordapp.com/assets/be0060dafb7a0e31d2a1ca17c0708636.woff);
+                src: url(https://github.com/AllThingsSmitty/fonts/blob/master/HelveticaNeue/helveticaneue.woff);
                 font-weight: 600;
             }
             
             @font-face {
                 font-family: Whitney;
-                src: url(https://discordapp.com/assets/8e12fb4f14d9c4592eb8ec9f22337b04.woff);
+                src: url(https://github.com/AllThingsSmitty/fonts/blob/master/HelveticaNeue/helveticaneue.woff);
                 font-weight: 700;
             }
             
@@ -856,7 +871,7 @@ module.exports.run = async (bot, message, args) => {
     .setColor('#ABDFF2')
     .setTitle("Peace Keeper Transcripts")
     .setDescription("Here is your requested transcript from Heiwa's discord server!")
-    .addField("From channel: ", message.channel.name)
+    .addField("From channel: ", "`#" + message.channel.name + "`")
     .setTimestamp()
     .setThumbnail(message.guild.iconURL())
     .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))

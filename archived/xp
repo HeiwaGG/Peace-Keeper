@@ -1,0 +1,84 @@
+// XP related scripts (Goes in the index.js)
+  let xp = require("./indiscriminate/xp.json");
+bot.on("message", async message => {
+  if(message.author.bot) return;
+  if(message.channel.type === "dm") return;
+
+  let xpAdd = Math.floor(Math.random() * 7) + 8;
+
+  if(!xp[message.author.id]) {
+    xp[message.author.id] = {
+      xp: 0,
+      level: 1
+    };
+  }
+
+  
+  let curxp = xp[message.author.id].xp;
+  let curlvl = xp[message.author.id].level;
+  let nxtLvl = xp[message.author.id].level * 300;
+  xp[message.author.id].xp = curxp + xpAdd;
+  if(nxtLvl <= xp[message.author.id].xp) {
+    xp[message.author.id].level = curlvl + 1;
+
+    let levelChannel = message.guild.channels.cache.find(channel => channel.name === 'bot-peacekeeper-logger')
+
+
+    if(!levelChannel) {
+      const lvlChanNotFoundEmbed = new Discord.MessageEmbed()
+      .setColor('##FF6961')
+      .setTitle("**error!**")
+      .setDescription("Level logging channel not found! \n Please create a new channel called `levels` to log all level ups!")
+      .setFooter("Peace Keeper")
+      message.channel.send(lvlChanNotFoundEmbed);
+    } else {
+        if(levelChannel) {
+        let lvlUpMsgEmbed = new Discord.MessageEmbed()
+        .setColor('#ABDFF2')
+        .setTitle("**"+ message.author.tag +"**")
+        .setThumbnail(message.author.displayAvatarURL({dynamic: true, size: 1024}))
+        .addField("**Leveled up to:**", curlvl + 1)
+        .setTimestamp()
+        .setFooter(`Peace Keeper`);
+      levelChannel.send(lvlUpMsgEmbed);
+    }
+    }
+  }
+
+  fs.writeFile("./indiscriminate/xp.json", JSON.stringify(xp), (err) => {
+    if(err) console.log(err)
+  });
+});
+
+// Checking the user's level
+  const Discord = require("discord.js");
+  let xp = require("../indiscriminate/xp.json");
+  module.exports.run = async (bot, message) => {
+
+    if(!xp[message.author.id]) {
+        xp[message.author.id] = {
+            xp: 0,
+            level: 1
+        };
+    }
+
+    message.delete().catch();
+
+    let curxp = xp[message.author.id].xp;
+    let curlvl = xp[message.author.id].level;
+    let nxtLvlXp = curlvl * 300;
+    let difference = nxtLvlXp - curxp;
+
+    let lvlEmbed = new Discord.MessageEmbed()
+      .setColor('#ABDFF2')
+      .setTitle("** " + message.guild.name + " **")
+      .addField("**Current Level:**", curlvl, true)
+      .addField("**Current XP:**", curxp, true)
+      .setFooter(message.author.tag + ` | ${difference} XP til next level up!`, message.author.displayAvatarURL({dynamic: true, size: 1024}));
+      message.channel.send(lvlEmbed);
+  }
+  module.exports.help = {
+  name: "slevel"
+  }
+
+// Add a "xp.json" file in the directory of ("./indiscriminate/xp.json")

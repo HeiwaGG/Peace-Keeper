@@ -21,16 +21,16 @@ module.exports.run = async (bot, message, args) => {
       .setTitle("** " + ancArgs[0] + " **")
       .setDescription(ancArgs[1])
       .setTimestamp()
-      .setThumbnail(servericon)
+      .setThumbnail(ancArgs[2])
       .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
       message.channel.send(ancEmbed);
     })
   } else {
-    message.delete().catch();
+    message.delete()
     const ancErrEmbed = new Discord.MessageEmbed()
       .setColor('FF6961')
       .setTitle("**error!**")
-      .setDescription("use the correct format: !special-anc <title> | <message>")
+      .setDescription("use the correct format: !special-anc <title> | <message> | <direct link to the image>")
       .setTimestamp()
       .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
       message.reply(ancErrEmbed).then(msg => msg.delete({timeout: 10000}));

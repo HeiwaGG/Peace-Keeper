@@ -69,6 +69,7 @@ module.exports.run = async (bot, message, args) => {
   
  if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 9500}));
  if(!args[0]) return message.reply(usage).then(msg => msg.delete({timeout: 8000}));
+ if(isNaN(args[0])) return message.reply(usage).then(msg => msg.delete({timeout: 8000}));
  if(args[0] > 100) return message.reply(usage).then(msg => msg.delete({timeout: 8000}));
  
   // Transcript

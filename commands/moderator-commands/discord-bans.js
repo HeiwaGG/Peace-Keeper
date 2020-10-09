@@ -4,7 +4,6 @@ module.exports.run = async (bot, message) => {
 
     let guild = message.guild;
     const bannedUser = message.mentions.members.first();
-    var CertifiedRole = guild.roles.cache.find(role => role.name === 'Certified');
     let mentionMessage = message.content.slice(6);
 
     const noUserErrEmbed = new Discord.MessageEmbed()
@@ -14,12 +13,18 @@ module.exports.run = async (bot, message) => {
     .addField("Usage:", "!dban `<@user>` <reason>")
     .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
 
+    if(!bannedUser) return message.reply(noUserErrEmbed).then(msg => msg.delete({timeout: 5000}));
+
+
     const noPermsErrEmbed = new Discord.MessageEmbed()
     .setColor('FF6961')
     .setTitle("**error!**")
     .setDescription("This command can only be used by staff!")
     .setTimestamp()
     .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+
+    if(!message.member.hasPermission("BAN_MEMBERS")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
+
 
     const BanEmbed = new Discord.MessageEmbed()
     .setTitle("**Heiwa Peace Keeper**")
@@ -46,14 +51,9 @@ module.exports.run = async (bot, message) => {
 
     let logChannel = message.guild.channels.cache.find(ch => ch.name === "discord-punishments")
 
-    if(message.content.startsWith ("!dban")) {
-        if(!message.member.hasPermission("BAN_MEMBERS")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
-        if(!bannedUser) return message.reply(noUserErrEmbed).then(msg => msg.delete({timeout: 5000}));
-        bannedUser.roles.remove(CertifiedRole)
-        bannedUser.send(BanEmbed).then(() => { 
-            guild.members.ban(bannedUser, {reason: mentionMessage})});
-        logChannel.send(BanLogEmbed);
-    }
+    bannedUser.send(BanEmbed).then(() => { 
+        guild.members.ban(bannedUser, {reason: mentionMessage})});
+    logChannel.send(BanLogEmbed);
 }
 
 module.exports.help = {
