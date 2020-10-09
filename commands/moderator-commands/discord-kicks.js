@@ -1,8 +1,7 @@
 const Discord = require("discord.js");
 
-module.exports.run = async (bot, message, args) => {
+module.exports.run = async (bot, message) => {
 
-    let guild = message.guild;
     let logChannel = message.guild.channels.cache.find(ch => ch.name === "discord-punishments")
     let mentionMessage = message.content.slice(6)
     const kickedUser = message.mentions.users.first()
@@ -23,6 +22,8 @@ module.exports.run = async (bot, message, args) => {
     .setTimestamp()
     .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
 
+    if(!message.member.hasPermission("KICK_MEMBERS")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
+
     const kickEmbed = new Discord.MessageEmbed()
     .setTitle("**Heiwa Peace Keeper**")
     .setDescription("You have been kicked out the Heiwa discord server!")
@@ -42,16 +43,12 @@ module.exports.run = async (bot, message, args) => {
     .addField('Bot?', kickedUser.bot, true)
     .setThumbnail(kickedUser.displayAvatarURL({dynamic: true, size: 1024}))
     .setTimestamp()
-    .attachFiles
     .setFooter("Peace Keeper")
     .setColor('#fdfd96')
 
-    if(message.content.startsWith ("!dkick")) {
-        if(!message.member.hasPermission("KICK_MEMBERS")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
-        kickedUser.send(kickEmbed).then(() => { 
-            message.mentions.members.first().kick(kickedUser, {reason: mentionMessage})});
-        logChannel.send(kickLogEmbed);
-    }
+    kickedUser.send(kickEmbed).then(() => { 
+        message.mentions.members.first().kick(kickedUser, {reason: mentionMessage})});
+    logChannel.send(kickLogEmbed);
 }
 
 module.exports.help = {
