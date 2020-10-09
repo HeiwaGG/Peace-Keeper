@@ -2,7 +2,6 @@ const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
 
-    const redis = require('redis')
     let logChannel = message.guild.channels.cache.find(ch => ch.name === "discord-punishments")
     let mentionMessage = message.content.slice(6)
     const mutedUser = message.mentions.users.first()
@@ -21,6 +20,7 @@ module.exports.run = async (bot, message, args) => {
     .setDescription("Provide the user's @!")
     .addField("Usage:", "!dmute `<@user>` <reason>")
     .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+
     if(!mutedUser) return message.reply(noUserErrEmbed).then(msg => msg.delete({timeout: 5000}));
 
     const noPermsErrEmbed = new Discord.MessageEmbed()
@@ -29,8 +29,8 @@ module.exports.run = async (bot, message, args) => {
     .setDescription("This command can only be used by staff!")
     .setTimestamp()
     .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
-    if(!message.member.hasPermission("MANAGE_ROLES")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
 
+    if(!message.member.hasPermission("MANAGE_ROLES")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
 
     const mutedEmbed = new Discord.MessageEmbed()
     .setTitle("**Heiwa Peace Keeper**")
@@ -53,6 +53,7 @@ module.exports.run = async (bot, message, args) => {
     .setFooter("Peace Keeper")
     .setColor('#fdfd96')
 
+    mutedUser.roles.cache.add
     
 }
 
