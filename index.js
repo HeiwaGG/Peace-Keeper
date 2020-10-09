@@ -57,7 +57,7 @@ bot.on('message', message => {
 // Server Logs
   // Logging members who have joined
   bot.on('guildMemberAdd', (member) => {
-    let logChannel = message.guild.channels.cache.find(channel => channel.name === 'bot-peacekeeper-logger')
+    let logChannel = member.guild.channels.cache.find(channel => channel.name === 'bot-peacekeeper-logger')
     if (!logChannel) return undefined;
   let joinEmbed = new Discord.MessageEmbed()
   .setTitle("**A user has joined the discord...**")
@@ -93,7 +93,8 @@ bot.on('message', message => {
   bot.on('messageUpdate', async(oldMessage, newMessage) => {
   if(oldMessage.content === newMessage.content){
     return;
-  }
+  };
+  
   let editEmbed = new Discord.MessageEmbed()
   .setTitle("**A message was edited...**")
   .setDescription("By: " + `<@${oldMessage.author.id}>` + "," + " in channel: " + `${oldMessage.channel}`)
