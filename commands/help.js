@@ -32,9 +32,8 @@ module.exports.run = async (bot, message) => {
      .addField('**!uhc:**', "Toggling UHC alerts.")
      .addField("**!website**", "Tell's you the official's Heiwa website.")
      .addField('**!store:**', "Tell's you the store to buy ranks and such.")
-     .addField('**!level:**', "Tell's you your chatting XP level.")
      .addField("**!sinfo:**", "Tell's you the discord server information.")
-     .addField("**!uinfo:**", "Tell's you your discord account information.")
+     .addField("**!uinfo:**", "Tell's you your discord account information or someone else's.")
      .setThumbnail(servericon)
      message.channel.send(rewardsembed).then(msg => msg.delete({timeout: 30000}));
 }

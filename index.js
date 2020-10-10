@@ -128,6 +128,14 @@ bot.on('message', message => {
   logChannel.send(deleteEmbed);
 });
 
+// Fun
+bot.on('message', message => {
+  if (message.content === ['what is my avatar' || "testerino"]) {
+    message.reply(message.author.displayAvatarURL({dynamic: true, size: 1024}));
+    return;
+  }
+});
+
 // Words filters
 bot.on('message', message => {
 

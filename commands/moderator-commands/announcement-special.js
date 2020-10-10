@@ -10,7 +10,7 @@ module.exports.run = async (bot, message, args) => {
   .setDescription("This command can only be used by staff!")
   .setTimestamp()
   .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
-  if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply(noPermsErrEmbed).then(msg => msg.delete(5000));
+  if(!message.member.hasPermission("ADMINISTRATOR")) return message.reply(noPermsErrEmbed).then(msg => msg.delete(5000));
 
   let ancArgs = args.slice(0).join(" ").split('|');
   
