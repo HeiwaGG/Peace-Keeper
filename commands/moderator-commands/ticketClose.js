@@ -81,7 +81,6 @@ module.exports.run = async (bot, message, args) => {
      .setTimestamp()
      .setFooter("Peace Keeper")
     ;
-
     if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
     
     const ticketChanErrEmbed = new Discord.MessageEmbed()
