@@ -75,7 +75,7 @@ module.exports.run = async (bot, message, args) => {
     .addField("Ticket Name:", "#ticket-" + message.author.username, true)
     .addField("Opened By:", `<@${message.author.id}>`, true)
     .addField("Ticket Reason:", ticketReason , true)
-    .addField("__Be warned!__", "We do not take harrassment lightly, if you act malicous in any form towards staff, the ticket will be closed and you might be punished.")
+    .addField("__Be warned!__", "We do not take harrassment lightly, if you act malicous in any form towards staff, the ticket will be closed and you will be punished.")
     .addField("Note:", "*To get this chat's transcript, please allow direct messages from this server.\nIf unsure on how to turn this on, ask staff here on how to do this.*")
     .setTimestamp()
     .setFooter("Peace Keeper")
