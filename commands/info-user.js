@@ -9,7 +9,7 @@ module.exports.run = async (bot, message, args) => {
    .setColor('#FF6961')
    .setTitle("error!")
    .setDescription("Wrong channel!")
-   .addField("Please keep discord bot usage in the correct channel:", "<#750998349276250123>")
+   .addField("Please keep discord bot usage in the correct channel:", `<#${botCommandsChannel.id}>`)
    .setTimestamp()
    .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
    if(message.channel != botCommandsChannel) {

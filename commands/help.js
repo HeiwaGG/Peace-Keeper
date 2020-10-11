@@ -7,15 +7,15 @@ module.exports.run = async (bot, message) => {
    .setColor('#FF6961')
    .setTitle("error!")
    .setDescription("Wrong channel!")
-   .addField("Please keep discord bot usage in the correct channel:", "<#750998349276250123>")
+   .addField("Please keep discord bot usage in the correct channel:", `<#${botCommandsChannel.id}>`)
    .setTimestamp()
    .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
    if(message.channel != botCommandsChannel) {
     message.delete()
     message.channel.send(wrongChannelEmbed).then(msg => msg.delete({timeout: 7000}));
-   }
-    else {
-     let rewardsembed = new Discord.MessageEmbed()
+   } 
+   else {
+     let helpEmbed = new Discord.MessageEmbed()
      .setAuthor(message.guild.name)
      .setTimestamp()
      .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
@@ -32,9 +32,7 @@ module.exports.run = async (bot, message) => {
      .addField("**!uinfo:**", "Tell's you your discord account information or someone else's.")
      .setThumbnail(message.guild.iconURL({dynamic: true, size: 1024}))
     ;
-  
-  message.delete()
-  message.channel.send(rewardsembed)
+  message.reply(helpEmbed)
 }
 }
 
