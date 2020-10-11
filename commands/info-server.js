@@ -18,7 +18,6 @@ module.exports.run = async (bot, message, args) => {
 
   message.delete().catch();
 
-     let online = message.guild.members.cache.filter(member => member.user.presence.status !== 'offline');
      let servericon = ('https://i.imgur.com/foKcByT.png');
      let serverembed = new Discord.MessageEmbed()
      .setAuthor(message.guild.name)
