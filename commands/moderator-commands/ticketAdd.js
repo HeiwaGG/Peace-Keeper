@@ -9,6 +9,15 @@ module.exports.run = async (bot, message, args) => {
     let ticketargs = args.slice(0).join(" ").split('|');
   ;
 
+  const noPermsErrEmbed = new Discord.MessageEmbed()
+   .setColor('FF6961')
+   .setTitle("**error!**")
+   .setDescription("This command can only be used by staff!")
+   .setTimestamp()
+   .setFooter("Peace Keeper")
+  ;
+  if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
+
   const ticketChanErrEmbed = new Discord.MessageEmbed()
    .setColor('FF6961')
    .setTitle("**error!**")
@@ -34,7 +43,12 @@ module.exports.run = async (bot, message, args) => {
    .setFooter("Peace Keeper")
   ;
   
-  message.channel.updateOverwrite(mentionedUser, {"VIEW_CHANNEL": true, "SEND_MESSAGES": true, "ATTACH_FILES": true, "CREATE_INSTANT_INVITE": false, "ADD_REACTIONS": false}).then(message.channel.send(Success));
+  message.channel.updateOverwrite(mentionedUser, {
+    "VIEW_CHANNEL": true, 
+    "SEND_MESSAGES": true, 
+    "ATTACH_FILES": true, 
+    "CREATE_INSTANT_INVITE": false, 
+    "ADD_REACTIONS": false}).then(message.channel.send(Success));
   message.channel.send(`<@${mentionedUser.id}>`).then(message => message.delete())
 }
  
