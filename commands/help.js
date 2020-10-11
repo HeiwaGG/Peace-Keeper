@@ -15,10 +15,6 @@ module.exports.run = async (bot, message) => {
     message.channel.send(wrongChannelEmbed).then(msg => msg.delete({timeout: 7000}));
    }
     else {
-
-   
-    message.delete().catch();
-     let servericon = message.guild.iconURL;
      let rewardsembed = new Discord.MessageEmbed()
      .setAuthor(message.guild.name)
      .setTimestamp()
@@ -34,8 +30,11 @@ module.exports.run = async (bot, message) => {
      .addField('**!store:**', "Tell's you the store to buy ranks and such.")
      .addField("**!sinfo:**", "Tell's you the discord server information.")
      .addField("**!uinfo:**", "Tell's you your discord account information or someone else's.")
-     .setThumbnail(servericon)
-     message.channel.send(rewardsembed).then(msg => msg.delete({timeout: 30000}));
+     .setThumbnail(message.guild.iconURL({dynamic: true, size: 1024}))
+    ;
+  
+  message.delete()
+  message.channel.send(rewardsembed)
 }
 }
 
