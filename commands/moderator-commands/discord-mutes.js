@@ -38,7 +38,7 @@ module.exports.run = async (bot, message, args) => {
      .setTimestamp()
      .setFooter("Peace Keeper • This was an automatic message from Heiwa's discord.")
      .setColor('#fdfd96')
-    ;
+    ; 
     const muteLogEmbed = new Discord.MessageEmbed()
     .setTitle("Someone has muted someone on the discord...")
      .setDescription(`${message.author}` + " has muted " + `${mutedUser}` + " on the discord.")

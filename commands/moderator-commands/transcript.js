@@ -880,7 +880,7 @@ module.exports.run = async (bot, message, args) => {
         message.author.send('', { files: [transFile] });
     });
 }   
- 
+
 module.exports.help = {
   name: "transcript"
 }

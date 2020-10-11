@@ -40,8 +40,8 @@ module.exports.run = async (bot, message, args) => {
    .setTitle("**Success!**")
    .setDescription(`<@${mentionedUser.id}>` + " has been added to this channel!")
    .setTimestamp()
-   .setFooter("Peace Keeper")
-  ;
+   .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+   ;
   
   message.channel.updateOverwrite(mentionedUser, {
     "VIEW_CHANNEL": true, 
