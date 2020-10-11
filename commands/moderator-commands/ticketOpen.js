@@ -58,28 +58,31 @@ module.exports.run = async (bot, message, args) => {
     .addField("Ticket Reason:", ticketReason , true)
     .setTimestamp()
     .setFooter("Peace Keeper");
-
     message.channel.send(embedCreateTicket)
+
     guild.channels.create("ticket - " + username, {reason: 'Private ticket channel for ' + username}).then((createdChan) => {
         createdChan.setParent(categoryID).then((settedParent) => {
-            settedParent.updateOverwrite(message.author, {"VIEW_CHANNEL": true, "SEND_MESSAGES": true, "ATTACH_FILES": true, "CREATE_INSTANT_INVITE": false, "ADD_REACTIONS": false}).then(createdChan.setTopic(`${message.author.id}`) )
-            
-            // Embed that gets send when the ticket channel gets open and informs staff and the ticket author about this ticket.
-            var embedParent = new Discord.MessageEmbed()
-             .setTitle("**Tickets**")
-             .setColor('#ABDFF2')
-             .setDescription("All online staff have been notified, we will get back to you as soon as possible.")
-             .addField("Ticket Name:", "#ticket-" + message.author.username, true)
-             .addField("Opened By:", `<@${message.author.id}>`, true)
-             .addField("Ticket Reason:", ticketReason , true)
-             .addField("__Be warned!__", "We do not take harrassment lightly, if you act malicous in any form towards staff, the ticket will be closed and you might be punished.")
-             .addField("Note:", "*To get this chat's transcript, please allow direct messages from this server.\nIf unsure on how to turn this on, ask staff here on how to do this.*")
-             .setTimestamp()
-             .setFooter("Peace Keeper")
+            settedParent.updateOverwrite(message.author, {
+              "VIEW_CHANNEL": true, 
+              "SEND_MESSAGES": true, 
+              "ATTACH_FILES": true,}).then(createdChan.setTopic(`${message.author.id}`))
             ;
-            settedParent.send(`<@&${StaffPing}>`)
-            settedParent.send(`<@${message.author.id}>`)
-            settedParent.send(embedParent);
+   // Embed that gets send when the ticket channel gets open and informs staff and the ticket author about this ticket.
+   var embedParent = new Discord.MessageEmbed()
+    .setTitle("**Tickets**")
+    .setColor('#ABDFF2')
+    .setDescription("All online staff have been notified, we will get back to you as soon as possible.")
+    .addField("Ticket Name:", "#ticket-" + message.author.username, true)
+    .addField("Opened By:", `<@${message.author.id}>`, true)
+    .addField("Ticket Reason:", ticketReason , true)
+    .addField("__Be warned!__", "We do not take harrassment lightly, if you act malicous in any form towards staff, the ticket will be closed and you might be punished.")
+    .addField("Note:", "*To get this chat's transcript, please allow direct messages from this server.\nIf unsure on how to turn this on, ask staff here on how to do this.*")
+    .setTimestamp()
+    .setFooter("Peace Keeper")
+   ;
+   settedParent.send(`<@&${StaffPing}>`)
+   settedParent.send(`<@${message.author.id}>`)
+   settedParent.send(embedParent);
         });
     });
 
