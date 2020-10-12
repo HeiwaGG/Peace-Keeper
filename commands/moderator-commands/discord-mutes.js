@@ -28,12 +28,15 @@ module.exports.run = async (bot, message, args) => {
      .setTitle("**error!**")
      .setDescription("Cant mute a user who is already muted!")
      .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
-    if(mutedUser.roles.cache.has(mutedRole)) return message.reply(alrMutedEmbed).then(msg => msg.delete({timeout: 5000}));    
+    if(message.mentions.members.first().roles.cache.has("763781380885708820")) {
+        message.channel.send(alrMutedEmbed).then(message => message.delete({timeout: 5000}))
+        return;
+    }     
     ;
     const mutedEmbed = new Discord.MessageEmbed()
      .setTitle("**Heiwa Peace Keeper**")
      .setDescription("You have been muted on the Heiwa discord server!")
-     .addField("What now?", "You will be unmuted within due time, however if you keep repeating what you already been muted for, you'll be punished for even longer.")
+     .addField("What now?", "You will be unmuted within due time, however if you keep repeating what you were already muted for, you'll be punished for even longer.")
      .addField("Follow the rules:", "*https://heiwa.gg/rules*")
      .setTimestamp()
      .setFooter("Peace Keeper • This was an automatic message from Heiwa's discord.")
