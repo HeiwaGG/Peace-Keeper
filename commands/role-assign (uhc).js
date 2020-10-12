@@ -16,7 +16,6 @@ module.exports.run = async (bot, message, args) => {
     message.delete()
     message.channel.send(wrongChannelEmbed).then(msg => msg.delete({timeout: 7000}));
     }
-
    if(message.member.roles.cache.has(uhc)) {
         message.delete()
         message.member.roles.remove(uhc);  
