@@ -128,14 +128,6 @@ bot.on('message', message => {
   logChannel.send(deleteEmbed);
 });
 
-// Fun
-bot.on('message', message => {
-  if (message.content === ['what is my avatar' || "testerino"]) {
-    message.reply(message.author.displayAvatarURL({dynamic: true, size: 1024}));
-    return;
-  }
-});
-
 // Words filters
 bot.on('message', message => {
 
@@ -187,6 +179,13 @@ bot.on('message', message => {
     }
   };
 });
+
+bot.on('message', message => {
+  if(!message.channel.type === "dm") return ;
+  if(message.content === "open a ticket") {
+    message.reply("this work!")
+  }
+})
 
 // Confirming the bot is running and is changing the status of it on discord
 bot.on('ready', () => {
