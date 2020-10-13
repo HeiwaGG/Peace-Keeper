@@ -59,7 +59,7 @@ module.exports.run = async (bot, message, args) => {
      .addField("Below is your ticket's transcript: ", "Keep in mind that this message will only log the last 100 messages,\nthis is done in order to standby discord regulations.")
      .setTimestamp()
      .setThumbnail(servericon)
-     .setFooter("Peace Keeper")
+     .setFooter("Peace Keeper • This was an automatic message from Heiwa's discord.")
     ;
 
     const LogChannelEmbedTicketClose = new Discord.MessageEmbed()

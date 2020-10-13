@@ -28,7 +28,7 @@ module.exports.run = async (bot, message, args) => {
      .setColor('90ee90')
      .setTitle("Someone has unbanned someone off the discord...")
      .setDescription(`${message.author}` + " has unbanned " + `${bannedUser}` + " off the discord.")
-     .addField('Member:', bannedUser.tag, true)
+     .addField('Member:', `<@${mutedUser.id}>`, true)
      .addField('Precense:', bannedUser.status, true)
      .addField('Bot?', bannedUser.bot, true)
      .setThumbnail(bannedUser.displayAvatarURL({dynamic: true, size: 1024}))

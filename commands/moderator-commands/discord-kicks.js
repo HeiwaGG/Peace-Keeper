@@ -38,7 +38,7 @@ module.exports.run = async (bot, message) => {
     .setTitle("Someone has kicked someone out the discord...")
     .setDescription(`${message.author}` + " has kicked " + `${kickedUser}` + " out off the discord.")
     .addField("Reason: ", mentionMessage)
-    .addField('Member:', kickedUser.tag, true)
+    .addField('Member:', `<@${mutedUser.id}>`, true)
     .addField('Precense:', kickedUser.status, true)
     .addField('Bot?', kickedUser.bot, true)
     .setThumbnail(kickedUser.displayAvatarURL({dynamic: true, size: 1024}))

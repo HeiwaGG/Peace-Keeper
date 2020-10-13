@@ -183,7 +183,7 @@ bot.on('message', message => {
 bot.on('message', message => {
   if(!message.channel.type === "dm") return ;
   if(message.content === "open a ticket") {
-    message.reply("this work!")
+    message.reply("")
   }
 })
 

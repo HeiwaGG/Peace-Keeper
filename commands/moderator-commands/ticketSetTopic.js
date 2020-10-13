@@ -1,14 +1,12 @@
 const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
-
    // Setups 
     const categoryID = "730413542653820958";
     let mentionedUser = message.mentions.users.first()
     let guild = bot.guilds.cache.get("725636740232249366")
     let ticketargs = args.slice(0).join(" ").split('|');
   ;
-
    const noPermsErrEmbed = new Discord.MessageEmbed()
    .setColor('FF6961')
    .setTitle("**error!**")

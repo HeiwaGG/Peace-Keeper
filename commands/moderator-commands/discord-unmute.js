@@ -19,31 +19,31 @@ module.exports.run = async (bot, message, args) => {
      .setColor('FF6961')
      .setTitle("**error!**")
      .setDescription("Provide the user's @!")
-     .addField("Usage:", "`!dmute <@user> <reason>`")
+     .addField("Usage:", "`!dunmute <@user>`")
      .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
     if(!mutedUser) return message.reply(noUserErrEmbed).then(msg => msg.delete({timeout: 5000}));
     ;
-    const alrMutedEmbed = new Discord.MessageEmbed()
+    const notMutedEmbed = new Discord.MessageEmbed()
      .setColor('FF6961')
      .setTitle("**error!**")
-     .setDescription("Cant mute a user who is already muted!")
+     .setDescription("Cant unmute a user who is already unmuted!")
      .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
-    if(message.mentions.members.first().roles.cache.has("763781380885708820")) {
-        message.channel.send(alrMutedEmbed).then(message => message.delete({timeout: 5000}))
+    if(!message.mentions.members.first().roles.cache.has("763781380885708820")) {
+        message.channel.send(notMutedEmbed).then(message => message.delete({timeout: 5000}))
         return;
     }     
     ;
     const mutedEmbed = new Discord.MessageEmbed()
      .setTitle("**Heiwa Peace Keeper**")
-     .setDescription("You have been muted on the Heiwa discord server!")
-     .addField("What now?", "You will be unmuted within due time, however if you keep repeating what you were already muted for, you'll be punished for even longer.")
+     .setDescription("You have been unmuted on the Heiwa discord server!")
+     .addField("You regained you chatting ability on the Heiwa discord server!", "Be nice this time. ✌")
      .addField("Follow the rules:", "*https://heiwa.gg/rules*")
      .setTimestamp()
      .setFooter("Peace Keeper • This was an automatic message from Heiwa's discord.")
-     .setColor('#fdfd96')
+     .setColor('#90ee90')
     ; 
     const muteLogEmbed = new Discord.MessageEmbed()
-    .setTitle("Someone has muted someone on the discord...")
+    .setTitle("Someone has unmuted someone on the discord...")
      .setDescription(`${message.author}` + " has muted " + `${mutedUser}` + " on the discord.")
      .addField("Reason: ", mentionMessage)
      .addField('Member:', `<@${mutedUser.id}>`, true)
@@ -52,14 +52,14 @@ module.exports.run = async (bot, message, args) => {
      .setThumbnail(mutedUser.displayAvatarURL({dynamic: true, size: 1024}))
      .setTimestamp()
      .setFooter("Peace Keeper")
-     .setColor('#fdfd96')
+     .setColor('#90ee90')
     ;
 
-    message.mentions.members.first().roles.add(mutedRole)
+    message.mentions.members.first().roles.remove(mutedRole)
     mutedUser.send(mutedEmbed)
     logChannel.send(muteLogEmbed);
 }
 
 module.exports.help = {
-    name: "dmute" 
+    name: "dunmute" 
 }
