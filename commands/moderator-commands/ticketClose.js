@@ -849,9 +849,9 @@ module.exports.run = async (bot, message, args) => {
 
                 html += `<div class="chatlog__embed-footer">`
 
-                if (msg.embeds[0].footer.iconURL()) {
+                if (msg.embeds[0].footer.displayAvatarURL) {
 
-                    html += `<img class="chatlog__embed-footer-icon" src="${msg.embeds[0].footer.iconURL()}" alt="Footer icon">`
+                    html += `<img class="chatlog__embed-footer-icon" src="${msg.embeds[0].footer.displayAvatarURL()}" alt="Footer icon">`
 
                 }
 
