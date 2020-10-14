@@ -31,7 +31,7 @@ module.exports.run = async (bot, message, args) => {
     if(!message.mentions.members.first().roles.cache.has("763781380885708820")) {
         message.channel.send(notMutedEmbed).then(message => message.delete({timeout: 5000}))
         return;
-    }     
+        }     
     ;
     const mutedEmbed = new Discord.MessageEmbed()
      .setTitle("**Heiwa Peace Keeper**")

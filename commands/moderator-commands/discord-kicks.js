@@ -8,20 +8,18 @@ module.exports.run = async (bot, message) => {
 
     const noUserErrEmbed = new Discord.MessageEmbed()
     .setColor('FF6961')
-    .setTitle("**error!**")
-    .setDescription("Provide the user's @!")
-    .addField("Usage:", "!dkick `<@user>` <reason>")
-    .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
-
+      .setTitle("**error!**")
+     .setDescription("Provide the user's @!")
+     .addField("Usage:", "!dkick `<@user>` <reason>")
+     .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
     if(!kickedUser) return message.reply(noUserErrEmbed).then(msg => msg.delete({timeout: 5000}));
 
     const noPermsErrEmbed = new Discord.MessageEmbed()
     .setColor('FF6961')
-    .setTitle("**error!**")
-    .setDescription("This command can only be used by staff!")
+      .setTitle("**error!**")
+     .setDescription("This command can only be used by staff!")
     .setTimestamp()
-    .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
-
+     .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024})) 
     if(!message.member.hasPermission("KICK_MEMBERS")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
 
     const kickEmbed = new Discord.MessageEmbed()
