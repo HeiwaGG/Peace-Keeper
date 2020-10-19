@@ -818,9 +818,9 @@ for (let msg of Array.from(messages.values()).reverse()) {
 
             html += `<div class="chatlog__embed-footer">`
 
-            if (msg.embeds[0].footer.displayAvatarURL) {
+            if (msg.embeds[0].footer.iconURL) {
 
-                html += `<img class="chatlog__embed-footer-icon" src="${msg.embeds[0].footer.displayAvatarURL()}" alt="Footer icon">`
+                html += `<img class="chatlog__embed-footer-icon" src="${msg.embeds[0].footer.iconURL}" alt="Footer icon">`
 
             }
 
