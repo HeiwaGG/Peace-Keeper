@@ -209,6 +209,9 @@ bot.on('message', message => {
   };
     // Checks for links
   for (y = 0; y < linksWords.length; y++) {
+    if(message.member.roles.cache.get("730420809642016828")) {
+      return ;
+    }
     if(message.content.includes(linksWords[y])) {
       message.delete();
       message.channel.send(linksEmbed).then(msg => msg.delete({timeout: 8500}))
