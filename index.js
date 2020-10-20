@@ -44,7 +44,7 @@ fs.readdir("./commands/moderator-commands/", (err, files) => {
 
 });
 
-// Command Hanlders
+// Command Hanlders & anti-DMing
 bot.on('message', message => {
   let messageArray = message.content.split(" ");
   let cmd = messageArray[0];
@@ -57,12 +57,12 @@ bot.on('message', message => {
    .addField("Please do `!help` to see what commands you can do!", "*Keep in mind these are all cap sensitive!*")
     .setTimestamp()
    .setFooter() 
-   .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+   .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
   ;
   let notHereEmbed = new Discord.MessageEmbed()
    .setColor('FF6961')
    .setTitle('error!')
-   .addField('Do not send me messages directly', "Only use me in <#750998349276250123>")
+   .addField('Do not send me messages directly!', "Only use me in <#750998349276250123>")
    .setTimestamp()
    .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
   ;
@@ -88,12 +88,12 @@ bot.on('message', message => {
   let joinEmbed = new Discord.MessageEmbed()
   .setTitle("**A user has joined the discord...**")
   .setDescription(`<@${member.user.id}>` + " joined the discord.")
-  .setTimestamp()
   .setThumbnail(member.user.displayAvatarURL({dynamic: true, size: 1024}))
   .addField("User Details:", member.user.tag, true)
   .addField("Status:", member.presence.status, true)
   .addField("Bot?", member.user.bot, true)
-  .setFooter(`Peace Keeper`)
+  .setFooter(bot.user.username, bot.user.displayAvatarURL({dynamic: true, size: 1024}))
+  .setTimestamp()
   .setColor('#ABDFF2')
   logChannel.send(joinEmbed);
 });
@@ -110,7 +110,7 @@ bot.on('message', message => {
   .addField("User Details:", member.user.tag, true)
   .addField("Status:", member.presence.status, true)
   .addField("Bot?", member.user.bot, true)
-  .setFooter(`Peace Keeper`)
+  .setFooter(bot.user.username, bot.user.displayAvatarURL({dynamic: true, size: 1024}))
   .setColor('#007FBD')
   logChannel.send(leaveEmbed);
 });
@@ -128,7 +128,7 @@ bot.on('message', message => {
   .addField("Before:", '"*'+`${oldMessage.content}`+'*"' , false)
   .addField("After:", '"*'+`${newMessage.content}`+'*"' , false)
   .setThumbnail(oldMessage.author.displayAvatarURL({dynamic: true, size: 1024}))
-  .setFooter(`Peace Keeper`)
+  .setFooter(bot.user.username, bot.user.displayAvatarURL({dynamic: true, size: 1024}))
   .setColor('#E3E3E3')
   
   let logChannel = oldMessage.guild.channels.cache.find(channel => channel.name === 'bot-peacekeeper-logger')
@@ -146,7 +146,7 @@ bot.on('message', message => {
    .setTimestamp()
    .setThumbnail(message.author.displayAvatarURL({dynamic: true, size: 1024}))
    .addField("Message:", '"**'+`${message.content}`+'**"' + " *in channel:*" + " " + `${message.channel}`, false)
-   .setFooter(`Peace Keeper`)
+   .setFooter(bot.user.username, bot.user.displayAvatarURL({dynamic: true, size: 1024}))
    .setColor('#E3E3E3')
   ;
 
@@ -209,8 +209,8 @@ bot.on('message', message => {
   };
     // Checks for links
   for (y = 0; y < linksWords.length; y++) {
-    if(message.member.roles.cache.get("730420809642016828")) {
-      return ;
+    if(message.author.bot) {
+      return;
     }
     if(message.content.includes(linksWords[y])) {
       message.delete();
@@ -220,16 +220,42 @@ bot.on('message', message => {
   };
 });
 
-bot.on('message', (message) => {
-  if(message.channel.type !== "dm" && message.content === "openTicket") { 
-    return;
-  }
-});
-
 // Confirming the bot is running and is changing the status of it on discord
 bot.on('ready', () => {
   console.log('This bot is now online and running (ﾉ´ヮ´)ﾉ*:･ﾟ✧');
    bot.user.setActivity('heiwa.gg | !help');
+})
+
+// Error catching
+process.on('unhandledRejection', (error, message) => { 
+  var mentionAymhh = "<@176610715686273024>"
+  var loggingChannel = bot.channels.cache.get("768004556889784321")
+  var errorEmbed = new Discord.MessageEmbed()
+   .setColor('FF6961')
+   .setTitle("error!")
+   .setDescription("An error has occured!")
+   .addField("Issue: ", "```" + error + "```")
+   .setTimestamp()
+   .setFooter(bot.user.id + " | " + bot.user.username, bot.user.displayAvatarURL({dynamic: true, size: 1024}))
+  ;
+  loggingChannel.send(errorEmbed)
+  loggingChannel.send(mentionAymhh).then(message => message.delete())
+  console.error('Unhandled promise rejection:', error)
+});
+bot.on('error', (err, message) => {
+  var mentionAymhh = "<@176610715686273024>"
+  var loggingChannel = bot.channels.cache.get("768004556889784321")
+  var errorEmbed = new Discord.MessageEmbed()
+   .setColor('FF6961')
+   .setTitle("error!")
+   .setDescription("An error has occured!")
+   .addField("Issue: ", "```" + error + "```")
+   .setTimestamp()
+   .setFooter(bot.user.id + " | " + bot.user.username, bot.user.displayAvatarURL({dynamic: true, size: 1024}))
+  ;
+  loggingChannel.send(errorEmbed)
+  loggingChannel.send(mentionAymhh).then(message => message.delete())
+  console.error('Unhandled promise rejection:', err) 
 })
 
 bot.login(token)
