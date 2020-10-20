@@ -6,6 +6,7 @@ bot.commands = new Discord.Collection();
   const { prefix, token }  = require("./indiscriminate/config.json");
   const racicalWords = require('./chat-filters/racicalWords.json');
   const toxicityWords = require('./chat-filters/toxicityWords.json');
+  const linksWords = require('./chat-filters/linkWords.json');
 
 // File Loaders
 fs.readdir("./commands/", (err, files) => {
@@ -148,7 +149,7 @@ bot.on('message', message => {
    .setFooter(`Peace Keeper`)
    .setColor('#E3E3E3')
   ;
-  
+
   let logChannel = message.guild.channels.cache.find(channel => channel.name === 'bot-peacekeeper-logger')
   if(!logChannel) return;
   
@@ -163,31 +164,31 @@ bot.on('message', message => {
   const icon = 'https://i.dlpng.com/static/png/6658651_preview.png'
   
   const racicalEmbed = new Discord.MessageEmbed()
-    .setTitle('error!')
-    .setDescription('Do not say any racial slurs.')
-    .addField('If you continue doing such you will be punished!', "We do not take toxicity lightly.")
-    .setColor('FF6961')
-    .setThumbnail(icon)
-    .setTimestamp()
-    .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+   .setTitle('error!')
+   .setDescription('Do not say any racial slurs.')
+   .addField('If you continue doing such you will be punished!', "We do not take toxicity lightly.")
+   .setColor('FF6961')
+   .setThumbnail(icon)
+   .setTimestamp()
+   .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
   ;
-   const toxicityEmbed = new Discord.MessageEmbed()
-    .setTitle('error!')
-    .setDescription('Do not say such offensive words.')
-    .addField('If you continue doing such you will be punished!', "We do not take toxicity lightly.")
-    .setColor('FF6961')
-    .setThumbnail(icon)
-    .setTimestamp()
-    .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+  const toxicityEmbed = new Discord.MessageEmbed()
+   .setTitle('error!')
+   .setDescription('Do not say such offensive words.')
+   .addField('If you continue doing such you will be punished!', "We do not take toxicity lightly.")
+   .setColor('FF6961')
+   .setThumbnail(icon)
+   .setTimestamp()
+   .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
   ;
-    const linksEmbed = new Discord.MessageEmbed()
-    .setTitle('error!')
-    .setDescription('Do not post any links.')
-    .addField('If you continue doing such you will be punished!', "Read up on our rules here: https://heiwa.gg/rules")
-    .setColor('FF6961')
-    .setThumbnail(icon)
-    .setTimestamp()
-    .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+  const linksEmbed = new Discord.MessageEmbed()
+   .setTitle('error!')
+   .setDescription('Do not post any links.')
+   .addField('If you continue doing such you will be punished!', "Read up on our rules here")
+   .setColor('FF6961')
+   .setThumbnail(icon)
+   .setTimestamp()
+   .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
   ;
 
   // Checks for racial slurs
@@ -203,6 +204,14 @@ bot.on('message', message => {
     if(message.content.includes(toxicityWords[z])) {
       message.delete();
       message.channel.send(toxicityEmbed).then(msg => msg.delete({timeout: 8500}))
+      return;
+    }
+  };
+    // Checks for links
+  for (y = 0; y < linksWords.length; y++) {
+    if(message.content.includes(linksWords[y])) {
+      message.delete();
+      message.channel.send(linksEmbed).then(msg => msg.delete({timeout: 8500}))
       return;
     }
   };
