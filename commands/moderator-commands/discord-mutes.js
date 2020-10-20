@@ -3,7 +3,6 @@ const Discord = require("discord.js");
 module.exports.run = async (bot, message, args) => {
 
     let logChannel = message.guild.channels.cache.find(ch => ch.name === "discord-punishments")
-    let mentionMessage = message.content.slice(6)
     const mutedUser = message.mentions.users.first()
     const mutedRole = message.guild.roles.cache.find(r => r.name === "Muted");
 
@@ -23,6 +22,14 @@ module.exports.run = async (bot, message, args) => {
      .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
     if(!mutedUser) return message.reply(noUserErrEmbed).then(msg => msg.delete({timeout: 5000}));
     ;
+    const noReasonErrEmbed = new Discord.MessageEmbed()
+    .setColor('FF6961')
+    .setTitle("**error!**")
+    .setDescription("Provide the reason for the mute!")
+    .addField("Usage:", "`!dmute <@user> <reason>`")
+    .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
+   if(!args[1]) return message.reply(noReasonErrEmbed).then(msg => msg.delete({timeout: 5000}));
+   ;
     const alrMutedEmbed = new Discord.MessageEmbed()
      .setColor('FF6961')
      .setTitle("**error!**")
@@ -45,10 +52,10 @@ module.exports.run = async (bot, message, args) => {
     const muteLogEmbed = new Discord.MessageEmbed()
     .setTitle("Someone has muted someone on the discord...")
      .setDescription(`${message.author}` + " has muted " + `${mutedUser}` + " on the discord.")
-     .addField("Reason: ", mentionMessage)
+     .addField("Reason: ", args[1])
+     .addField("Beam me up Kīpā: ", "[Context](" + `${message.url}` + ")", true)
      .addField('Member:', `<@${mutedUser.id}>`, true)
-     .addField('Precense:', mutedUser.status, true)
-     .addField('Bot?', mutedUser.bot, true)
+     .addField("Handle:", mutedUser.tag, true)
      .setThumbnail(mutedUser.displayAvatarURL({dynamic: true, size: 1024}))
      .setTimestamp()
      .setFooter("Peace Keeper")
