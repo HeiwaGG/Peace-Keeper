@@ -20,7 +20,7 @@ module.exports.run = async (bot, message, args) => {
     message.channel.send(channelEmbed).then(msg => msg.delete({timeout: 5000}));}
     
   if(message.content === '!certify') {
-    message.member.roles.add([CertifiedRole, UHCrole])}
+    message.member.roles.add([CertifiedRole])}
 
 };
 module.exports.help = {
