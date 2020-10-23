@@ -17,27 +17,34 @@ module.exports.run = async (bot, message, args) => {
     message.channel.send(wrongChannelEmbed).then(msg => msg.delete({timeout: 7000}));
     return;
    }
+
    if(!mentionedUser) {
     message.delete()
     let embed = new Discord.MessageEmbed()
-    .setAuthor(`${user.tag}'s Info`, user.displayAvatarURL({dynamic: true, size: 1024}))
+    .setAuthor(`${user.username}'s user `, user.displayAvatarURL({dynamic: true, size: 1024}))
     .setThumbnail(user.displayAvatarURL({dynamic: true, size: 1024}))
     .setColor('#ABDFF2')
-    .addField('Member:', message.author.tag, true)
-    .addField('Precense:', user.presence.status, true)
-    .addField('Bot?', user.bot, true)
-    .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL())
+    .addField('Handle:', message.author.tag, true)
+    .addField('Precense:', message.author.presence.status, true)
+    .addField('Bot?', message.author.bot, true)
+    .addField("Roles: ", message.member.roles.cache.array(), true)
+    .addField("User ID", message.author.id)
+    .addField("Account creation:", message.author.createdAt)
+    .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL())
     .setTimestamp()
     message.channel.send(embed)
   } else {
     let embed2 = new Discord.MessageEmbed()
-    .setAuthor(`${mentionedUser.tag}'s Info`, mentionedUser.displayAvatarURL({dynamic: true, size: 1024}))
+    .setAuthor(`${mentionedUser.username}'s Info`, mentionedUser.displayAvatarURL({dynamic: true, size: 1024}))
     .setThumbnail(mentionedUser.displayAvatarURL({dynamic: true, size: 1024}))
     .setColor('#ABDFF2')
-    .addField('Member:', mentionedUser.tag, true)
+    .addField('Handle:', mentionedUser.tag, true)
     .addField('Precense:', mentionedUser.presence.status, true)
     .addField('Bot?', mentionedUser.bot, true)
-    .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL())
+    .addField("Discord offical?", mentionedUser.system, true)
+    .addField("User ID", mentionedUser.id)
+    .addField("Account creation:", mentionedUser.createdAt)
+    .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL())
     .setTimestamp()
     message.channel.send(embed2)
   }

@@ -5,7 +5,7 @@ module.exports.run = async (bot, message, args) => {
      let linksembed = new Discord.MessageEmbed()
      .setTitle("Website")
      .setTimestamp()
-     .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+     .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
      .setColor('#E3E3E3')
      .setDescription("Server website: https://heiwa.gg")
      message.channel.send(linksembed)

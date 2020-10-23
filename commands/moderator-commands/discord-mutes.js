@@ -18,7 +18,7 @@ module.exports.run = async (bot, message, args) => {
      .setColor('FF6961')
      .setTitle("**error!**")
      .setDescription("Provide the user's @!")
-     .addField("Usage:", "`!dmute <@user> <reason>`")
+     .addField("Usage:", "```!dmute <@user> <reason>```")
      .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
     if(!mutedUser) return message.reply(noUserErrEmbed).then(msg => msg.delete({timeout: 5000}));
     ;
@@ -26,7 +26,7 @@ module.exports.run = async (bot, message, args) => {
     .setColor('FF6961')
     .setTitle("**error!**")
     .setDescription("Provide the reason for the mute!")
-    .addField("Usage:", "`!dmute <@user> <reason>`")
+    .addField("Usage:", "```!dmute <@user> <reason>```")
     .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
    if(!args[1]) return message.reply(noReasonErrEmbed).then(msg => msg.delete({timeout: 5000}));
    ;

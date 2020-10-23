@@ -23,9 +23,9 @@ module.exports.run = async (bot, message) => {
    .setColor('#007FBD')
    .setTitle("Using Polls")
    .setDescription("This is a command used to help you start a poll in the <#726235115063083018> channel")
-   .addField("To start one you need to use the format:", "`!polls-start <title of your suggestion> | <details of your suggestion>`")
+   .addField("To start one you need to use the format:", "```!polls-start <title of your suggestion> | <details of your suggestion>```")
    .addField("Keep your title short!", "If you wish to explain your suggestion more, write it out after putting the '|'")
-   .addField("If you don't wish to add details about your suggestion leave a blank space after the '|'", 'Adding details to your suggestion is optional if it is self-explanatory such as *"fix kb"* and etc.')
+   .addField("If you don't wish to add details about your suggestion leave a blank space after the '|'", 'Adding details to your suggestion is optional if it is self-explanatory such as *`fix kb`* and etc.')
    message.channel.send(linksembed).then(msg => msg.delete({timeout: 30000}));
    } 
 }

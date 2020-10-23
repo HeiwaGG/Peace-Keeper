@@ -25,14 +25,13 @@ module.exports.run = async (bot, message, args) => {
      .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
      .setColor('#ABDFF2')
      .setThumbnail(servericon)
-     .addField("Owner", message.guild.owner.user.tag, true)
+     .addField("Owner", `<@${message.guild.owner.user.id}>`, true)
      .addField("Channels", message.guild.channels.cache.size, true)
      .addField("Roles", message.guild.roles.cache.size, true)
      .addField("Members", message.guild.memberCount, true)
      .addField("Bots", message.guild.members.cache.filter(m => m.user.bot).size, true)
-     .addField("Creation Date", message.guild.createdAt)
      message.channel.send(serverembed).then(msg => msg.delete({timeout: 10000}));
-}
+  }
 }
  
 module.exports.help = {

@@ -18,13 +18,13 @@ module.exports.run = async (bot, message) => {
      let helpEmbed = new Discord.MessageEmbed()
      .setTitle("Heiwa Help Menu")
      .setDescription("All the possible commands you can do you can do!\n*Reminder that these are all case sensitive commands!*")
-     .addField("`!topen`", "Opens a new support ticket.")
-     .addField('`!polls-start`', "Starts a poll in the <#726235115063083018> channel.")
-     .addField("`!bug-report`", "Used for reporting bugs to the staff team.")
-     .addField("`!website`", "Tell's you the official Heiwa website.")
-     .addField("`!sinfo`", "Tell's you the discord server information.")
-     .addField("`!uinfo`", "Tell's you your discord account information or someone else's.")
-     .addField("`!about`", "Information about the creator of this bot!")
+     .addField("```!topen```", "Opens a new support ticket.")
+     .addField('```!polls-start```', "Starts a poll in the <#726235115063083018> channel.")
+     .addField("```!bug-report```", "Used for reporting bugs to the staff team.")
+     .addField("```!website```", "Tell's you the official Heiwa website.")
+     .addField("```!sinfo```", "Tell's you the discord server information.")
+     .addField("```!uinfo```", "Tell's you your discord account information or someone else's.")
+     .addField("```!about```", "Information about the creator of this bot!")
      .setThumbnail(message.guild.iconURL({dynamic: true, size: 1024}))
      .setTimestamp()
      .setColor('#ABDFF2')
@@ -35,5 +35,6 @@ module.exports.run = async (bot, message) => {
 }
 
 module.exports.help = {
-  name: "help"
+  name: "help",
+  cooldown: "3"
 }

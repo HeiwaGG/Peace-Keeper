@@ -142,7 +142,7 @@ bot.on('message', message => {
   
   let deleteEmbed = new Discord.MessageEmbed()
    .setTitle("**A message was deleted...**")
-   .setDescription("By: " + `<@${message.author.id}>`)
+   .setDescription("Author: " + `<@${message.author.id}>`)
    .setTimestamp()
    .setThumbnail(message.author.displayAvatarURL({dynamic: true, size: 1024}))
    .addField("Message:", '"**'+`${message.content}`+'**"' + " *in channel:*" + " " + `${message.channel}`, false)
@@ -223,7 +223,7 @@ bot.on('message', message => {
 // Confirming the bot is running and is changing the status of it on discord
 bot.on('ready', () => {
   console.log('This bot is now online and running (ﾉ´ヮ´)ﾉ*:･ﾟ✧');
-   bot.user.setActivity('heiwa.gg | !help');
+   bot.user.setActivity('heiwa.gg | !help', {type: "WATCHING"});
 })
 
 // Error catching
@@ -258,4 +258,4 @@ bot.on('error', (err, message) => {
   console.error('Unhandled promise rejection:', err) 
 })
 
-bot.login(token)
+bot.login(token);
