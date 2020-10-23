@@ -16,7 +16,7 @@ module.exports.run = async (bot, message, args) => {
    }
     else {
 //
-  const bugReportsChannel = message.guild.channels.cache.get('753222755100393522');
+  const bugReportsChannel = message.guild.channels.cache.find(channel => channel.name === "bug-reports");
 
   let pollArgs = args.slice(0).join(" ").split('|');
   
@@ -27,7 +27,7 @@ module.exports.run = async (bot, message, args) => {
     .addField('*Keep in mind:*', '*You maybe contacted again to discuss this bug report inorder for us to understand it better.*')
     .setTimestamp()
     .setThumbnail(message.author.displayAvatarURL({dynamic: true, size: 1024}))
-    .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
+    .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
   
   const detailsEmbed = new Discord.MessageEmbed()
     .setColor('#ABDFF2')
@@ -44,10 +44,6 @@ module.exports.run = async (bot, message, args) => {
     .setTimestamp()
     .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
   
-  if (!pollArgs[1]) {
-    pollArgs[1] = "No description was given..."
-  }
-
   if (args.length >= 1) {
       message.delete()
       bugReportsChannel.send(detailsEmbed).then(botCommandsChannel.send(tyBugEmbed));
@@ -57,7 +53,7 @@ module.exports.run = async (bot, message, args) => {
       message.reply(bugErrEmbed);
     }
   }
-};
+}
 
 module.exports.help = {
   name: "bug-report"

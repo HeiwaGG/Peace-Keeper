@@ -3,27 +3,25 @@ const Discord = require("discord.js");
 module.exports.run = async (bot, message, args) => {
 
    // Restricts commands to bot commands channels
-   const botCommandsResChannel = "750998349276250123"
+   let botCommandsChannel = message.guild.channels.cache.find(channel => channel.name === "bot-commands")
    const wrongChannelEmbed = new Discord.MessageEmbed()
      .setColor('#FF6961')
      .setTitle("error!")
      .setDescription("Wrong channel!")
-     .addField("Please keep discord bot usage in the correct channel:", "<#750998349276250123>")
+     .addField("Please keep discord bot usage in the correct channel:", `${botCommandsChannel}`)
      .setTimestamp()
      .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
-     if(message.channel != botCommandsResChannel) {
+     if(message.channel != botCommandsChannel.id) {
          message.delete()
          message.channel.send(wrongChannelEmbed).then(msg => msg.delete({timeout: 7000}));
          return;
      };
     
    // Setups 
-    const categoryID = "730413542653820958";
+    const ticketsCategory = message.guild.channels.cache.find(c => c.name === "Tickets" && c.type === "category")
     var username = message.author.username;
-    var bool = false;
     let servericon = message.guild.iconURL({dynamic: true, size: 1024});
-    let guild = bot.guilds.cache.get("725636740232249366")
-    let StaffPing = '730420809642016828'
+    let StaffPing = message.guild.roles.cache.find(role => role.name === 'Staff')
     let ticketargs = args.slice(0).join(" ").split('|');
     const ticketReason = ticketargs[0]
 
@@ -32,7 +30,7 @@ module.exports.run = async (bot, message, args) => {
      .setTitle("**error!**")
      .setColor('#FF6961')
      .setDescription("Please provide a reason on why you are opening this ticket.")
-     .addField("Format: ", "`!topen <reason>`")
+     .addField("Format:", "```!topen <reason>```")
      .setTimestamp()
      .setFooter("Peace Keeper");
     if(!ticketargs[0]) return message.channel.send(embedCreateNoReasonTicket).then(msg => msg.delete({timeout: 7000}));
@@ -45,16 +43,15 @@ module.exports.run = async (bot, message, args) => {
      .addField("You currently have a ticket open.", "Don't make a new ticket till the current one is closed.")
      .setTimestamp()
      .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
-    if(guild.channels.cache.find(channel => channel.name === "ticket-" + message.author.username)) return message.channel.send(newTicketErrEmbed);
+     if(message.guild.channels.cache.find(channel => channel.name === "ticket-" + message.author.username)) return message.channel.send(newTicketErrEmbed);
+    ;
 
-
-    guild.channels.create("ticket - " + username, {reason: 'Private ticket channel for ' + username}).then((createdChan) => {
-        createdChan.setParent(categoryID).then((settedParent) => {
+    message.guild.channels.create("ticket - " + username, {reason: 'Private ticket channel for ' + username}).then((createdChan) => {
+        createdChan.setParent(ticketsCategory.id).then((settedParent) => {
             settedParent.updateOverwrite(message.author, {
               "VIEW_CHANNEL": true, 
               "SEND_MESSAGES": true, 
-              "ATTACH_FILES": true,}).then(createdChan.setTopic(`${message.author.id}`))
-            ;
+              "ATTACH_FILES": true,}).then(createdChan.setTopic(`${message.author.id}`));
             
    // Embed for confirming the ticket is open and it's location.
    var embedCreateTicket = new Discord.MessageEmbed()
@@ -77,12 +74,12 @@ module.exports.run = async (bot, message, args) => {
     .addField("Ticket Name:", "#ticket-" + message.author.username, true)
     .addField("Opened By:", `<@${message.author.id}>`, true)
     .addField("Ticket Reason:", ticketReason , true)
-    .addField("__Be warned!__", "We do not take harrassment lightly, if you act malicous in any form towards staff, the ticket will be closed and you will be punished.")
-    .addField("Note:", "*To get this chat's transcript, please allow direct messages from this server.\nIf unsure on how to turn this on, ask staff here on how to do this.*")
+    .addField("__Be warned!__", "Harrassment is not taken lightly. If you act malicous in any form towards anyone, the ticket will be closed and you will be punished.")
+    .addField("Note:", "*To get this chat's transcript, please allow direct messages from this server.\nIf unsure on how to turn this on, ask here on how to do this.*")
     .setTimestamp()
     .setFooter("Peace Keeper")
    ;
-   settedParent.send(`<@&${StaffPing}>`)
+   settedParent.send(`<@&${StaffPing.id}>`)
    settedParent.send(`<@${message.author.id}>`)
    settedParent.send(embedParent);
    createdChan.setTopic(`${message.author.id}`)
@@ -92,23 +89,23 @@ module.exports.run = async (bot, message, args) => {
     var embedOpenTicket = new Discord.MessageEmbed()
      .setTitle("**Tickets**")
      .setColor('#ABDFF2')
-     .setThumbnail(servericon)
+     .setThumbnail(message.author.displayAvatarURL({dynamic: true, size: 1024}))
      .setDescription("A ticket has been opened!")
      .addField("Ticket Name:", "#ticket-" + message.author.username, true)
-     .addField("Opened By:", `<@${message.author.id}>`, true)
+     .addField("Opened By:", `${message.author.tag}`, true)
      .addField("Ticket Reason:", ticketReason , true)
      .setTimestamp()
      .setFooter("Peace Keeper");
     ;
     var logChannel = message.guild.channels.cache.find(channel => channel.name === "ticket-logs");
-    if(!logChannel) return message.channel.send("Logging channel does not exist!");
+    if(!logChannel) return message.channel.send("#ticket-logs doesn't exist!\nPlease make one and keep it private off the masses.");
 
     message.delete().then(() => {
     logChannel.send(embedOpenTicket);
     });
-}
+};
  
 module.exports.help = {
   name: "topen"
-}
+};
 

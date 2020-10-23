@@ -23,10 +23,10 @@ module.exports.run = async (bot, message, args) => {
    .setColor('#007FBD')
    .setTitle("Reporting Bugs")
    .setDescription("This is a command used to help you report a bug to us.")
-   .addField("To get started you need to use the command:", "```!bug-report <name of bug> | <what is the bug, where does it happen, how does it happen>```",)
+   .addField("To get started you need to use the command:", "`!bug-report <name of bug> | <what is the bug, where does it happen, how does it happen>`",)
    .addField("If you don't need to add details about your bug report leave a blank space after the '|'", "Adding details to your report is optional if it is self-explanatory.")
    message.channel.send(linksembed).then(msg => msg.delete({timeout: 20000}))
-  }
+}
 }
 
 module.exports.help = {

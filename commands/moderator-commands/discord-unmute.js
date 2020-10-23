@@ -34,12 +34,12 @@ module.exports.run = async (bot, message, args) => {
         }     
     ;
     const mutedEmbed = new Discord.MessageEmbed()
-     .setTitle("**Heiwa Peace Keeper**")
-     .setDescription("You have been unmuted on the Heiwa discord server!")
-     .addField("You regained you chatting ability on the Heiwa discord server!", "Be nice this time. ✌")
+     .setTitle("** Peace Keeper**")
+     .setDescription(`You have been unmuted on the ${message.guild.name} discord server!`)
+     .addField(`You regained you chatting ability on the ${message.guild.name} discord server!`, "Be nice this time. ✌")
      .addField("Follow the rules:", "*https://heiwa.gg/rules*")
      .setTimestamp()
-     .setFooter("Peace Keeper • This was an automatic message from Heiwa's discord.")
+     .setFooter(`Peace Keeper • This was an automatic message from ${message.guild.name} discord.`)
      .setColor('#90ee90')
     ; 
     const muteLogEmbed = new Discord.MessageEmbed()

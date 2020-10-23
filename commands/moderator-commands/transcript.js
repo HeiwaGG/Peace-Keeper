@@ -867,7 +867,7 @@ fs.writeFile(`./indiscriminate/transcripts/` + message.channel.name + ".html", h
     const transcriptEmbed = new Discord.MessageEmbed()
     .setColor('#ABDFF2')
     .setTitle("Peace Keeper Transcripts")
-    .setDescription("Here is your requested transcript from Heiwa's discord server!")
+    .setDescription(`Here is your requested transcript from ${message.guild.name}'s discord server!`)
     .addField("From channel: ", "`#" + message.channel.name + "`")
     .setTimestamp()
     .setThumbnail(message.guild.iconURL())

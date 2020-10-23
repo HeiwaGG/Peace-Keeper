@@ -40,7 +40,7 @@ module.exports.run = async (bot, message, args) => {
    .setTitle("Mass Cleaner")
    .addField("Removed ", `${args[0]} messages!`)
    .setTimestamp()
-   .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+   .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
   
  const noPermsErrEmbed = new Discord.MessageEmbed()
   .setColor('FF6961')   
@@ -48,7 +48,7 @@ module.exports.run = async (bot, message, args) => {
   .setDescription("This command can only be used by staff!")
   .setTimestamp()
   .setFooter("Peace Keeper")
-  .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+  .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
  
   const usage = new Discord.MessageEmbed()
   .setColor('FF6961')
@@ -56,7 +56,7 @@ module.exports.run = async (bot, message, args) => {
   .addField("Usage", "`!clear <number>`")
   .addField("Note: Due to discord API limitation: ", "*You can't clear more than 100 messages at a time!* \n You can't delete messages that are under 14 days old.")
   .setTimestamp()
-  .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+  .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
   
  if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 9500}));
  if(!args[0]) return message.reply(usage).then(msg => msg.delete({timeout: 8000}));

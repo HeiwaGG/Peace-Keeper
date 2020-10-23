@@ -1,6 +1,5 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
-let servericon = ('https://i.imgur.com/foKcByT.png');
 
 module.exports.run = async (bot, message, args) => {
   // No Perms Embed
@@ -9,7 +8,7 @@ module.exports.run = async (bot, message, args) => {
   .setTitle("**error!**")
   .setDescription("This command can only be used by staff!")
   .setTimestamp()
-  .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+  .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
   if(!message.member.hasPermission("ADMINISTRATOR")) return message.reply(noPermsErrEmbed).then(msg => msg.delete(5000));
 
   let ancArgs = args.slice(0).join(" ").split('|');
@@ -22,7 +21,7 @@ module.exports.run = async (bot, message, args) => {
       .setDescription(ancArgs[1])
       .setTimestamp()
       .setThumbnail(ancArgs[2])
-      .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+      .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
       message.channel.send(ancEmbed);
     })
   } else {
@@ -32,7 +31,7 @@ module.exports.run = async (bot, message, args) => {
       .setTitle("**error!**")
       .setDescription("use the correct format: !special-anc <title> | <message> | <direct link to the image>")
       .setTimestamp()
-      .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+      .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
       message.reply(ancErrEmbed).then(msg => msg.delete({timeout: 10000}));
   }
 }

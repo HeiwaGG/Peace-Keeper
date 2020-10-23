@@ -1,8 +1,6 @@
 const Discord = require("discord.js");
-const categoryID = "730413542653820958";
 const fs = require('fs');
 const { toHTML } = require('discord-markdown');
-let servericon = ('https://i.imgur.com/foKcByT.png');
 
 function rightColor(c) {
     if (/^#([a-f0-9]{3}){1,2}$/.test(c)) {
@@ -35,12 +33,16 @@ function correctTime(timestamp) {
 
 module.exports.run = async (bot, message, args) => {
 
+    const ticketsCategory = message.guild.channels.cache.find(c => c.name === "Tickets" && c.type === "category")
+    const ticketsID = ticketsCategory.id
+
     let cooldown = new Set();
+    let servericon = message.guild.iconURL({dynamic: true, size: 1024})
 
     const closeErrEmbed = new Discord.MessageEmbed()
     .setColor('FF6961')
     .setTitle("**error!**")
-    .setDescription("use the correct format: !tclose <reason>")
+    .setDescription("use the correct format: ```!tclose <reason>```")
     .setFooter("Peace Keeper")
     if(!args[0]) return message.reply(closeErrEmbed);
 
@@ -59,7 +61,7 @@ module.exports.run = async (bot, message, args) => {
      .addField("Below is your ticket's transcript: ", "Keep in mind that this message will only log the last 100 messages,\nthis is done in order to standby discord regulations.")
      .setTimestamp()
      .setThumbnail(servericon)
-     .setFooter("Peace Keeper • This was an automatic message from Heiwa's discord.")
+     .setFooter(`Peace Keeper • This was an automatic message from ${message.guild.name}'s discord.`)
     ;
 
     const LogChannelEmbedTicketClose = new Discord.MessageEmbed()
@@ -70,7 +72,7 @@ module.exports.run = async (bot, message, args) => {
      .addField("Closed by:", `<@${message.author.id}>`, true)
      .addField("Reason for closing:", reasonMsg, true)
      .setTimestamp()
-     .setThumbnail(`https://i.imgur.com/foKcByT.png`)
+     .setThumbnail(servericon)
      .setFooter("Peace Keeper");
     ;
     
@@ -91,7 +93,7 @@ module.exports.run = async (bot, message, args) => {
      .setFooter("Peace Keeper")
     ;
 
-    if(message.channel.parentID != categoryID) return message.channel.send(ticketChanErrEmbed).then(msg => msg.delete({timeout: 5000}));
+    if(message.channel.parentID != ticketsID) return message.channel.send(ticketChanErrEmbed).then(msg => msg.delete({timeout: 5000}));
 
 
     let messages = new Discord.Collection();

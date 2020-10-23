@@ -1,9 +1,9 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
-const CertifiedRole = '726225081860358164'
 const UHCrole = '726227757238845511'
 
 module.exports.run = async (bot, message, args) => {
+  const CertifiedRole = message.guild.roles.cache.find(roles => roles.name === 'Certified')
   const certificationChannel = message.guild.channels.cache.find(channel => channel.name === "certification");
 
   const channelEmbed = new Discord.MessageEmbed()
@@ -17,11 +17,10 @@ module.exports.run = async (bot, message, args) => {
   message.delete();
 
   if(message.channel != certificationChannel) {
-    message.channel.send(channelEmbed).then(msg => msg.delete({timeout: 5000}));}
+    message.channel.send(channelEmbed).then(msg => msg.delete({timeout: 5000}))};
     
   if(message.content === '!certify') {
-    message.member.roles.add([CertifiedRole])}
-
+    message.member.roles.add(CertifiedRole)};
 };
 module.exports.help = {
   name: "certify"

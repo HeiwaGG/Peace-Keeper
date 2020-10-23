@@ -3,9 +3,8 @@ const Discord = require("discord.js");
 module.exports.run = async (bot, message, args) => {
 
    // Setups 
-    const categoryID = "730413542653820958";
+    const categoryID =  message.guild.channels.cache.find(c => c.name === "Tickets" && c.type === "category")
     let mentionedUser = message.mentions.users.first()
-    let guild = bot.guilds.cache.get("725636740232249366")
     let ticketargs = args.slice(0).join(" ").split('|');
   ;
 
@@ -30,7 +29,7 @@ module.exports.run = async (bot, message, args) => {
    .setColor('FF6961')
    .setTitle("**error!**")
    .setDescription("Mention a user you want added to this ticket!")
-   .addField("Command format:", "`!tadd <@user>`")
+   .addField("Command format:", "```!tadd <@user>```")
    .setTimestamp()
    .setFooter("Peace Keeper")
   if(!mentionedUser) return message.channel.send(noUserErrEmbed).then(msg => msg.delete({timeout: 5000}));

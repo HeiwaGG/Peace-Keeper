@@ -7,9 +7,12 @@ bot.commands = new Discord.Collection();
   const racicalWords = require('./chat-filters/racicalWords.json');
   const toxicityWords = require('./chat-filters/toxicityWords.json');
   const linksWords = require('./chat-filters/linkWords.json');
+  const mongo = require('./indiscriminate/mongo');
+  const { Mongoose } = require("mongoose");
 
 // File Loaders
-fs.readdir("./commands/", (err, files) => {
+ // Commands
+ fs.readdir("./commands/", (err, files) => {
 
   if(err) console.log(err);
 
@@ -26,7 +29,7 @@ fs.readdir("./commands/", (err, files) => {
   });
 
 });
-fs.readdir("./commands/moderator-commands/", (err, files) => {
+ fs.readdir("./commands/moderator-commands/", (err, files) => {
 
   if(err) console.log(err);
 
@@ -43,6 +46,25 @@ fs.readdir("./commands/moderator-commands/", (err, files) => {
   });
 
 });
+ // MongoDB
+ fs.readdir("./indiscriminate/", (err, files) => {
+
+  if(err) console.log(err);
+
+  let jsfile = files.filter(f => f.split(".").pop() === "js")
+  if(jsfile.length <= 0){
+    console.log("There are no .js files in this directory...");
+    return;
+  }
+
+  jsfile.forEach((f) =>{
+    let props = require(`./indiscriminate/${f}`);
+    console.log(`${f} loaded!`);
+    bot.commands.set(props.help.name, props);
+  });
+
+});
+
 
 // Command Hanlders & anti-DMing
 bot.on('message', message => {
@@ -50,6 +72,8 @@ bot.on('message', message => {
   let cmd = messageArray[0];
   let args = messageArray.slice(1);
   let commandfile = bot.commands.get(cmd.slice(prefix.length));
+  let commandsChannel = bot.channels.cache.find(channel => channel.name === 'bot-commands').id
+
   let noCommandEmbed = new Discord.MessageEmbed()
    .setColor("FF6961")
    .setTitle("error!")
@@ -62,7 +86,7 @@ bot.on('message', message => {
   let notHereEmbed = new Discord.MessageEmbed()
    .setColor('FF6961')
    .setTitle('error!')
-   .addField('Do not send me messages directly!', "Only use me in <#750998349276250123>")
+   .addField('Do not send me messages directly!', `Only use me in discord that got me in it.\nSuch as: <#${commandsChannel}>`)
    .setTimestamp()
    .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
   ;
@@ -78,6 +102,39 @@ bot.on('message', message => {
     return;
   } ;
   if(commandfile) commandfile.run(bot,message,args);
+});
+
+bot.on('guildCreate', guild  => {
+  generalChannel = guild.channels.cache.find(channel => channel.name === "general")
+
+  let joinEmbed2 = new Discord.MessageEmbed()
+   .setTitle("**We need to setup some administrator channels and categorys**")
+   .setDescription(`Please make the following channels with the exact name!`)
+   .addField("`#bot-peacekeeper-logger`", "So I can log: \nWho joined\nWho left\nDeleted messages\nEdited messages", true)
+   .addField("`#discord-punishments`", "So I can log server puishments such as:\nBans\nMutes\nKicks\nUn-Bans\nUn-Mutes", true)
+   .addField("`#ticket-logs`", "So I can tickets and it's transcripts", true)
+   .addField("`Tickets`", "So the tickets command is working, \nModify this channel so that: \n`@everyone` can't see any channel made in this\n`@Staff` can see messages in this")
+   .setColor('#007FBD')
+  ;
+  let joinEmbed3 = new Discord.MessageEmbed()
+   .setTitle("**Now we need to setup some user channels**")
+   .setDescription(`Please make the following channels with the exact name!`)
+   .addField("`#suggestions`", "So the polls command works!", true)
+   .addField("`#bug-reports`", "So the bug report command works!", true)
+   .addField("`#bot-commands`", "So users can only use me in that specific channel", true)
+   .setColor('#007FBD')
+  ;
+  let joinEmbed4 = new Discord.MessageEmbed()
+   .setTitle("**Now we need to setup a role**")
+   .setDescription(`Please make the following role with the exact name!`)
+   .addField("`Muted`", "Role to assign to mute a user")
+   .setColor('#007FBD')
+  ;
+
+  generalChannel.send(joinEmbed1)
+  generalChannel.send(joinEmbed2)
+  generalChannel.send(joinEmbed3)
+  generalChannel.send(joinEmbed4)
 });
 
 // Server Logs
@@ -116,7 +173,7 @@ bot.on('message', message => {
 });
 
   // Logging messages that have been editied
-  bot.on('messageUpdate', async(oldMessage, newMessage) => {
+  bot.on('messageUpdate', async (oldMessage, newMessage) => {
   if(oldMessage.content === newMessage.content){
     return;
   };
@@ -166,7 +223,7 @@ bot.on('message', message => {
   const racicalEmbed = new Discord.MessageEmbed()
    .setTitle('error!')
    .setDescription('Do not say any racial slurs.')
-   .addField('If you continue doing such you will be punished!', "We do not take toxicity lightly.")
+   .addField('If you continue doing such you will be punished!', "Toxicity is not taken lightly.")
    .setColor('FF6961')
    .setThumbnail(icon)
    .setTimestamp()
@@ -175,22 +232,12 @@ bot.on('message', message => {
   const toxicityEmbed = new Discord.MessageEmbed()
    .setTitle('error!')
    .setDescription('Do not say such offensive words.')
-   .addField('If you continue doing such you will be punished!', "We do not take toxicity lightly.")
+   .addField('If you continue doing such you will be punished!', "Toxicity is not taken lightly.")
    .setColor('FF6961')
    .setThumbnail(icon)
    .setTimestamp()
    .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
   ;
-  const linksEmbed = new Discord.MessageEmbed()
-   .setTitle('error!')
-   .setDescription('Do not post any links.')
-   .addField('If you continue doing such you will be punished!', "Read up on our rules here")
-   .setColor('FF6961')
-   .setThumbnail(icon)
-   .setTimestamp()
-   .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
-  ;
-
   // Checks for racial slurs
   for (x = 0; x < racicalWords.length; x++) {
     if(message.content.includes(racicalWords[x])) {
@@ -207,21 +254,18 @@ bot.on('message', message => {
       return;
     }
   };
-    // Checks for links
-  for (y = 0; y < linksWords.length; y++) {
-    if(message.author.bot) {
-      return;
-    }
-    if(message.content.includes(linksWords[y])) {
-      message.delete();
-      message.channel.send(linksEmbed).then(msg => msg.delete({timeout: 8500}))
-      return;
-    }
-  };
 });
 
-// Confirming the bot is running and is changing the status of it on discord
-bot.on('ready', () => {
+// Confirming the bot is running along side the MongoDB and is changing the status on discord
+bot.on('ready', async () => {
+  await mongo().then(mongoose => {
+    try {
+      console.log("Connected to the MongoDB!")
+    } finally {
+      mongoose.connection.close()
+    }
+  })
+
   console.log('This bot is now online and running (ﾉ´ヮ´)ﾉ*:･ﾟ✧');
    bot.user.setActivity('heiwa.gg | !help', {type: "WATCHING"});
 })
@@ -253,6 +297,7 @@ bot.on('error', (err, message) => {
    .setTimestamp()
    .setFooter(bot.user.id + " | " + bot.user.username, bot.user.displayAvatarURL({dynamic: true, size: 1024}))
   ;
+  message.reply("Something went wrong! I have reported this to my creator!")
   loggingChannel.send(errorEmbed)
   loggingChannel.send(mentionAymhh).then(message => message.delete())
   console.error('Unhandled promise rejection:', err) 

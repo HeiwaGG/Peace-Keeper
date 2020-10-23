@@ -3,6 +3,7 @@ const Discord = require("discord.js");
 module.exports.run = async (bot, message) => {
    // Restricts commands to bot commands channels
    let botCommandsChannel = message.guild.channels.cache.find(channel => channel.name === "bot-commands")
+   let suggestionsChannel = message.guild.channels.cache.find(channel => channel.name === "suggestions")
    const wrongChannelEmbed = new Discord.MessageEmbed()
     .setColor('#FF6961')
     .setTitle("error!")
@@ -16,15 +17,14 @@ module.exports.run = async (bot, message) => {
    } 
    else {
      let helpEmbed = new Discord.MessageEmbed()
-     .setTitle("Heiwa Help Menu")
+     .setTitle(`Peace Keeper Help Menu`)
      .setDescription("All the possible commands you can do you can do!\n*Reminder that these are all case sensitive commands!*")
-     .addField("```!topen```", "Opens a new support ticket.")
-     .addField('```!polls-start```', "Starts a poll in the <#726235115063083018> channel.")
-     .addField("```!bug-report```", "Used for reporting bugs to the staff team.")
-     .addField("```!website```", "Tell's you the official Heiwa website.")
-     .addField("```!sinfo```", "Tell's you the discord server information.")
-     .addField("```!uinfo```", "Tell's you your discord account information or someone else's.")
-     .addField("```!about```", "Information about the creator of this bot!")
+     .addField("`!topen`", "Opens a new support ticket.")
+     .addField('`!polls-start`', `Starts a poll in the <#${suggestionsChannel.id}> channel.`)
+     .addField("`!bug-report`", "Used for reporting bugs to the staff team.")
+     .addField("`!sinfo`", "Tell's you the discord server information.")
+     .addField("`!uinfo`", "Tell's you your discord account information or someone else's.")
+     .addField("`!about`", "Information about the creator of this bot!")
      .setThumbnail(message.guild.iconURL({dynamic: true, size: 1024}))
      .setTimestamp()
      .setColor('#ABDFF2')
@@ -32,9 +32,8 @@ module.exports.run = async (bot, message) => {
     ;
   message.reply(helpEmbed)
   }
-}
+};
 
 module.exports.help = {
-  name: "help",
-  cooldown: "3"
-}
+  name: "help"
+};

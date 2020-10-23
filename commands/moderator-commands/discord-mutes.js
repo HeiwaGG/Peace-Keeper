@@ -4,6 +4,7 @@ module.exports.run = async (bot, message, args) => {
 
     let logChannel = message.guild.channels.cache.find(ch => ch.name === "discord-punishments")
     const mutedUser = message.mentions.users.first()
+    let mentionMessage = message.content.slice(7)
     const mutedRole = message.guild.roles.cache.find(r => r.name === "Muted");
 
     const noPermsErrEmbed = new Discord.MessageEmbed()
@@ -41,20 +42,19 @@ module.exports.run = async (bot, message, args) => {
     }     
     ;
     const mutedEmbed = new Discord.MessageEmbed()
-     .setTitle("**Heiwa Peace Keeper**")
-     .setDescription("You have been muted on the Heiwa discord server!")
+     .setTitle("**Peace Keeper**")
+     .setDescription(`You have been muted on the ${message.guild.name} discord server!`)
      .addField("What now?", "You will be unmuted within due time, however if you keep repeating what you were already muted for, you'll be punished for even longer.")
      .addField("Follow the rules:", "*https://heiwa.gg/rules*")
      .setTimestamp()
-     .setFooter("Peace Keeper • This was an automatic message from Heiwa's discord.")
+     .setFooter(bot.user.username + ' | This was an automatic message from the ' + `${message.guild.name}` +' discord.')
      .setColor('#fdfd96')
     ; 
     const muteLogEmbed = new Discord.MessageEmbed()
     .setTitle("Someone has muted someone on the discord...")
      .setDescription(`${message.author}` + " has muted " + `${mutedUser}` + " on the discord.")
-     .addField("Reason: ", args[1])
+     .addField("Reason: ", mentionMessage)
      .addField("Beam me up Kīpā: ", "[Context](" + `${message.url}` + ")", true)
-     .addField('Member:', `<@${mutedUser.id}>`, true)
      .addField("Handle:", mutedUser.tag, true)
      .setThumbnail(mutedUser.displayAvatarURL({dynamic: true, size: 1024}))
      .setTimestamp()
