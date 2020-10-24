@@ -34,7 +34,7 @@ module.exports.run = async (bot, message, args) => {
   const Success = new Discord.MessageEmbed()
    .setColor('ABDFF2')
    .setTitle("**Success!**")
-   .setDescription("Ticket channel topic updated!")
+   .setDescription("Ticket has been updated!")
    .setTimestamp()
    .setFooter("Peace Keeper")
   ;
