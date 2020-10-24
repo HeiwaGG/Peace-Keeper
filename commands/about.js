@@ -9,7 +9,9 @@ module.exports.run = async (bot, message) => {
         "https://i.imgur.com/uCE54aB.gif?noredirect",
         "https://i.pinimg.com/originals/0d/10/d2/0d10d2fe48a7956a4fdc9f7251132236.gif",
         "https://i.pinimg.com/originals/0d/10/d2/0d10d2fe48a7956a4fdc9f7251132236.gif",
-        "https://data.whicdn.com/images/54406285/original.gif"
+        "https://data.whicdn.com/images/54406285/original.gif",
+        "https://24.media.tumblr.com/tumblr_m2fhai4Vqh1qmpg90o1_500.gif",
+        "https://i.pinimg.com/originals/07/89/c2/0789c202335c03dd9175faa2f57981e7.gif"
     ]
 
     let pcImagesArray = pcImages[Math.floor(Math.random() * pcImages.length)];

@@ -12,7 +12,7 @@ module.exports.run = async (bot, message, args) => {
     const slowmodeErrEmbed = new Discord.MessageEmbed()
     .setColor('FF6961')
     .setTitle("**error!**")
-    .setDescription("use the correct format: `!slowmode seconds`")
+    .setDescription("use the correct format: ```!slowmode seconds```")
     .addField("Note:", "No decimal values or usage of letters.")
     .setTimestamp()
     .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
@@ -39,7 +39,7 @@ module.exports.run = async (bot, message, args) => {
         message.channel.send(slowmodeRemovedEmbed).then(message => message.delete({timeout: 7000}))
         message.channel.setRateLimitPerUser(args[0]);
         return ;
-    }
+        }
 
     message.delete()
     message.channel.send(slowmodeEmbed).then(message => message.delete({timeout: 7000}))

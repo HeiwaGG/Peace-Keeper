@@ -45,7 +45,7 @@ module.exports.run = async (bot, message, args) => {
    .setTimestamp()
    .setFooter("Peace Keeper")
   ;
-  if(message.channel.topic === mentionedUser.id) return message.channel.send(noNeedEmbed);
+  if(message.channel.topic === mentionedUser.id && message.channel.name === `ticket-${mentionedUser.username}`) return message.channel.send(noNeedEmbed);
   
   message.channel.setTopic(mentionedUser.id)
   message.channel.setName("ticket-" + mentionedUser.username)
@@ -56,4 +56,3 @@ module.exports.help = {
   name: "tset",
   description: "to set a ticket to a different user."
 }
-

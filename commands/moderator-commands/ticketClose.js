@@ -33,7 +33,7 @@ function correctTime(timestamp) {
 
 module.exports.run = async (bot, message, args) => {
 
-    const ticketsCategory = message.guild.channels.cache.find(c => c.name === "Tickets" && c.type === "category")
+    const ticketsCategory = message.guild.channels.cache.find(c => c.name.startsWith("Tickets") && c.type === "category")
     const ticketsID = ticketsCategory.id
 
     let cooldown = new Set();
@@ -908,7 +908,7 @@ module.exports.run = async (bot, message, args) => {
     
     setTimeout(() => {cooldown.delete(ticketOwner.id)}, 270);
     message.channel.delete(); 
-    }
+}
  
 module.exports.help = {
   name: "tclose"

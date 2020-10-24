@@ -6,7 +6,7 @@ module.exports.run = async (bot, message, args) => {
     const bannedUser = await bot.users.fetch(args[0]);
     mentionMessage = message.content.slice(8);
     let logChannel = message.guild.channels.cache.find(ch => ch.name === "discord-punishments")
-
+    
     const noPermsErrEmbed = new Discord.MessageEmbed()
      .setColor('FF6961')
      .setTitle("**error!**")

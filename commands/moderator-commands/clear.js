@@ -31,53 +31,53 @@ function correctTime(timestamp) {
 }
 
 module.exports.run = async (bot, message, args) => {
-
-  const logChannel = message.guild.channels.cache.find(channel => channel.name === "bot-peacekeeper-logger");
-
- let deletemessage = new Discord.MessageEmbed()
-   .setAuthor(message.guild.name)
-   .setColor("#ABDFF2")
-   .setTitle("Mass Cleaner")
-   .addField("Removed ", `${args[0]} messages!`)
+ 
+   const logChannel = message.guild.channels.cache.find(channel => channel.name === "bot-peacekeeper-logger");
+ 
+  let deletemessage = new Discord.MessageEmbed()
+    .setAuthor(message.guild.name)
+    .setColor("#ABDFF2")
+    .setTitle("Mass Cleaner")
+    .addField("Removed ", `${args[0]} messages!`)
+    .setTimestamp()
+    .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
+   
+  const noPermsErrEmbed = new Discord.MessageEmbed()
+   .setColor('FF6961')   
+   .setTitle("**error!**")
+   .setDescription("This command can only be used by staff!")
    .setTimestamp()
+   .setFooter("Peace Keeper")
    .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
   
- const noPermsErrEmbed = new Discord.MessageEmbed()
-  .setColor('FF6961')   
-  .setTitle("**error!**")
-  .setDescription("This command can only be used by staff!")
-  .setTimestamp()
-  .setFooter("Peace Keeper")
-  .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
- 
-  const usage = new Discord.MessageEmbed()
-  .setColor('FF6961')
-  .setTitle("**error!**")
-  .addField("Usage", "`!clear <number>`")
-  .addField("Note: Due to discord API limitation: ", "*You can't clear more than 100 messages at a time!* \n You can't delete messages that are under 14 days old.")
-  .setTimestamp()
-  .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
+   const usage = new Discord.MessageEmbed()
+   .setColor('FF6961')
+   .setTitle("**error!**")
+   .addField("Usage", "`!clear <number>`")
+   .addField("Note: Due to discord API limitation: ", "*You can't clear more than 100 messages at a time!* \n You can't delete messages that are under 14 days old.")
+   .setTimestamp()
+   .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
+   
+  if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 9500}));
+  if(!args[0]) return message.reply(usage).then(msg => msg.delete({timeout: 8000}));
+  if(isNaN(args[0])) return message.reply(usage).then(msg => msg.delete({timeout: 8000}));
+  if(args[0] > 100) return message.reply(usage).then(msg => msg.delete({timeout: 8000}));
   
- if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 9500}));
- if(!args[0]) return message.reply(usage).then(msg => msg.delete({timeout: 8000}));
- if(isNaN(args[0])) return message.reply(usage).then(msg => msg.delete({timeout: 8000}));
- if(args[0] > 100) return message.reply(usage).then(msg => msg.delete({timeout: 8000}));
- 
-  // Transcript
- let messages = new Discord.Collection();
- let channelMessages = await message.channel.messages.fetch({ limit: args[0] }).catch(err => console.log(err));
- messages = messages.concat(channelMessages);
- let maxcatch = 0
- while (channelMessages.size === args[0]) {
+   // Transcript
+  let messages = new Discord.Collection();
+  let channelMessages = await message.channel.messages.fetch({ limit: args[0] }).catch(err => console.log(err));
+  messages = messages.concat(channelMessages);
+  let maxcatch = 0
+  while (channelMessages.size === args[0]) {
      if (maxcatch == 4) break;
      let lastMessageId = channelMessages.lastKey();
      channelMessages = await message.channel.messages.fetch({ limit: args[0], before: lastMessageId }).catch(err => console.log(err));
      if (channelMessages)
          messages = messages.concat(channelMessages);
      maxcatch++;
- }
- const today = new Date();
-let html = `<!doctype html>
+  }
+  const today = new Date();
+ let html = `<!doctype html>
 <html lang="en">
     <head>
     <title>Closed Ticket</title>
@@ -673,7 +673,7 @@ let html = `<!doctype html>
         </div>
     </div>
     <div class="chatlog">`
-for (let msg of Array.from(messages.values()).reverse()) {
+ for (let msg of Array.from(messages.values()).reverse()) {
 
     let roleColor;
 
@@ -852,29 +852,29 @@ for (let msg of Array.from(messages.values()).reverse()) {
     html += `</div>
     </div>
     </div>`
-}
- fs.writeFile(`./indiscriminate/transcripts/` + message.channel.name + ".html", html, "utf8", err => {
+ }
+  fs.writeFile(`./indiscriminate/transcripts/` + message.channel.name + ".html", html, "utf8", err => {
  if (err) throw err;
 });
-
-
-let transFile = `./indiscriminate/transcripts/${message.channel.name}.html`;
-
-let deleteEmbed = new Discord.MessageEmbed()
- .setTitle("**Someone bulk deleted a set of messages...**")
- .setDescription("By: " + `<@${message.author.id}>`)
- .setTimestamp()
- .setThumbnail(message.author.displayAvatarURL({dynamic: true, size: 1024}))
- .addField(`${args[0]}` + " messages were deleted in channel:", `${message.channel}`, false)
- .setFooter(bot.user.username, bot.user.displayAvatarURL({dynamic: true, size: 1024}))
- .setColor('#E3E3E3')
-;
- message.channel.bulkDelete(args[0]).then(() => {
- message.channel.send(deletemessage).then(msg => msg.delete({timeout: 5000}));
- logChannel.send(deleteEmbed);
- logChannel.send('', { files: [transFile] });
- });
-};
+ 
+ 
+ let transFile = `./indiscriminate/transcripts/${message.channel.name}.html`;
+ 
+ let deleteEmbed = new Discord.MessageEmbed()
+  .setTitle("**Someone bulk deleted a set of messages...**")
+  .setDescription("By: " + `<@${message.author.id}>`)
+  .setTimestamp()
+  .setThumbnail(message.author.displayAvatarURL({dynamic: true, size: 1024}))
+  .addField(`${args[0]}` + " messages were deleted in channel:", `${message.channel}`, false)
+  .setFooter(bot.user.username, bot.user.displayAvatarURL({dynamic: true, size: 1024}))
+  .setColor('#E3E3E3')
+ ;
+  message.channel.bulkDelete(args[0]).then(() => {
+  message.channel.send(deletemessage).then(msg => msg.delete({timeout: 5000}));
+  logChannel.send(deleteEmbed);
+  logChannel.send('', { files: [transFile] });
+  });
+ };
 
 module.exports.help = {
   name: "clear"
