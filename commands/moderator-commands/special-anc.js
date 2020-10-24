@@ -29,7 +29,7 @@ module.exports.run = async (bot, message, args) => {
     const ancErrEmbed = new Discord.MessageEmbed()
       .setColor('FF6961')
       .setTitle("**error!**")
-      .setDescription("use the correct format: !special-anc <title> | <message> | <direct link to the image>")
+      .setDescription("use the correct format: ```!special-anc <title> | <message> | <direct link to the image>```")
       .setTimestamp()
       .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
       message.reply(ancErrEmbed).then(msg => msg.delete({timeout: 10000}));

@@ -258,6 +258,7 @@ bot.on('message', message => {
 
 // Confirming the bot is running along side the MongoDB and is changing the status on discord
 bot.on('ready', async () => {
+  /*
   await mongo().then(mongoose => {
     try {
       console.log("Connected to the MongoDB!")
@@ -265,9 +266,9 @@ bot.on('ready', async () => {
       mongoose.connection.close()
     }
   })
-
+  */
   console.log('This bot is now online and running (ﾉ´ヮ´)ﾉ*:･ﾟ✧');
-   bot.user.setActivity('heiwa.gg | !help', {type: "WATCHING"});
+   bot.user.setActivity('heiwa.gg | !help');
 })
 
 // Error catching

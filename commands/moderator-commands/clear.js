@@ -53,7 +53,7 @@ module.exports.run = async (bot, message, args) => {
    const usage = new Discord.MessageEmbed()
    .setColor('FF6961')
    .setTitle("**error!**")
-   .addField("Usage", "`!clear <number>`")
+   .addField("Usage", "```!clear <number>```")
    .addField("Note: Due to discord API limitation: ", "*You can't clear more than 100 messages at a time!* \n You can't delete messages that are under 14 days old.")
    .setTimestamp()
    .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
