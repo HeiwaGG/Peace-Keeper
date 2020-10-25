@@ -1,6 +1,8 @@
 const Discord = require("discord.js");
 const fs = require('fs');
 const { toHTML } = require('discord-markdown');
+const { error } = require("console");
+const { ifError } = require("assert");
 function rightColor(c) {
     if (/^#([a-f0-9]{3}){1,2}$/.test(c)) {
         if (c.length == 4) {
@@ -35,10 +37,9 @@ module.exports.run = async (bot, message, args) => {
    const logChannel = message.guild.channels.cache.find(channel => channel.name === "bot-peacekeeper-logger");
  
   let deletemessage = new Discord.MessageEmbed()
-    .setAuthor(message.guild.name)
     .setColor("#ABDFF2")
-    .setTitle("Mass Cleaner")
-    .addField("Removed ", `${args[0]} messages!`)
+    .setTitle("Bulk Clearer")
+    .setDescription(`Removed ${args[0]} messages!`)
     .setTimestamp()
     .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
    

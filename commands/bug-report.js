@@ -15,9 +15,7 @@ module.exports.run = async (bot, message, args) => {
     message.channel.send(wrongChannelEmbed).then(msg => msg.delete({timeout: 7000}));
    }
     else {
-//
   const bugReportsChannel = message.guild.channels.cache.find(channel => channel.name === "bug-reports");
-
   let pollArgs = args.slice(0).join(" ").split('|');
   
   const tyBugEmbed = new Discord.MessageEmbed()
@@ -28,7 +26,6 @@ module.exports.run = async (bot, message, args) => {
     .setTimestamp()
     .setThumbnail(message.author.displayAvatarURL({dynamic: true, size: 1024}))
     .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
-  
   const detailsEmbed = new Discord.MessageEmbed()
     .setColor('#ABDFF2')
     .setTitle("**" + pollArgs[0] + "**")
@@ -44,7 +41,7 @@ module.exports.run = async (bot, message, args) => {
     .addField("Need more help?", "`!bug-report-help`")
     .setTimestamp()
     .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
-  
+  ;
   if (args.length >= 3) {
       message.delete()
       bugReportsChannel.send(detailsEmbed).then(botCommandsChannel.send(tyBugEmbed));
@@ -54,7 +51,7 @@ module.exports.run = async (bot, message, args) => {
       message.reply(bugErrEmbed);
     }
   }
-}
+};
 
 module.exports.help = {
   name: "bug-report"

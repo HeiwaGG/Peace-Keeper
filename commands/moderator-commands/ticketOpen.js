@@ -18,7 +18,7 @@ module.exports.run = async (bot, message, args) => {
      };
     
    // Setups 
-    const ticketsCategory = message.guild.channels.cache.find(c => c.name.startsWith("Tickets") && c.type === "category")
+    const ticketsCategory = message.guild.channels.cache.find(c => c.name.includes("Tickets") && c.type === "category")
     var username = message.author.username;
     let servericon = message.guild.iconURL({dynamic: true, size: 1024});
     let StaffPing = message.guild.roles.cache.find(role => role.name === 'Staff')

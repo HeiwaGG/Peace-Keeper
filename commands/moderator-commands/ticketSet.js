@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
    // Setups 
-    const categoryID = message.guild.channels.cache.find(category => category.name === "Tickets").id
+    const categoryID = message.guild.channels.cache.find(c => c.name.includes("Tickets") && c.type === "category").id
     let mentionedUser = message.mentions.users.first()
     let ticketargs = args.slice(0).join(" ").split('|');
   ;
@@ -47,8 +47,7 @@ module.exports.run = async (bot, message, args) => {
   ;
   if(message.channel.topic === mentionedUser.id && message.channel.name === `ticket-${mentionedUser.username}`) return message.channel.send(noNeedEmbed);
   
-  message.channel.setTopic(mentionedUser.id)
-  message.channel.setName("ticket-" + mentionedUser.username)
+  message.channel.setTopic(mentionedUser.id).then(message.channel.setName("ticket-" + mentionedUser.username, ["Make ticket subject to another user."]))
   message.channel.send(Success)
 }
  

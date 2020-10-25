@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const fs = require('fs');
 const { toHTML } = require('discord-markdown');
+const { error } = require("console");
 
 function rightColor(c) {
     if (/^#([a-f0-9]{3}){1,2}$/.test(c)) {
@@ -33,11 +34,25 @@ function correctTime(timestamp) {
 
 module.exports.run = async (bot, message, args) => {
 
-    const ticketsCategory = message.guild.channels.cache.find(c => c.name.startsWith("Tickets") && c.type === "category")
+    const ticketsCategory = message.guild.channels.cache.find(c => c.name.includes("Tickets") && c.type === "category")
     const ticketsID = ticketsCategory.id
 
     let cooldown = new Set();
     let servericon = message.guild.iconURL({dynamic: true, size: 1024})
+    const ticketOwner = bot.users.cache.get(message.channel.topic);
+    const logChannel = message.guild.channels.cache.find(channel => channel.name === "ticket-logs");
+    const reasonMsg = message.content.split(" ").slice(1).join(" ");
+    let transFile = `./indiscriminate/transcripts/${message.channel.name}.html`;
+
+
+    const ticketChanErrEmbed = new Discord.MessageEmbed()
+    .setColor('FF6961')
+    .setTitle("**error!**")
+    .setDescription("This command can only be used inside ticket channels!")
+    .setTimestamp()
+    .setFooter("Peace Keeper")
+   ;
+   if(message.channel.parentID != ticketsID) return message.channel.send(ticketChanErrEmbed).then(msg => msg.delete({timeout: 5000}));
 
     const closeErrEmbed = new Discord.MessageEmbed()
     .setColor('FF6961')
@@ -46,10 +61,6 @@ module.exports.run = async (bot, message, args) => {
     .setFooter("Peace Keeper")
     if(!args[0]) return message.reply(closeErrEmbed);
 
-    const ticketOwner = bot.users.cache.get(message.channel.topic);
-    const logChannel = message.guild.channels.cache.find(channel => channel.name === "ticket-logs");
-    const reasonMsg = message.content.split(" ").slice(1).join(" ");
-    let transFile = `./indiscriminate/transcripts/${message.channel.name}.html`;
 
     const DMembedTicketClose = new Discord.MessageEmbed()
      .setTitle("**Tickets**")
@@ -85,16 +96,6 @@ module.exports.run = async (bot, message, args) => {
     ;
     if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
     
-    const ticketChanErrEmbed = new Discord.MessageEmbed()
-     .setColor('FF6961')
-     .setTitle("**error!**")
-     .setDescription("This command can only be used inside ticket channels!")
-     .setTimestamp()
-     .setFooter("Peace Keeper")
-    ;
-
-    if(message.channel.parentID != ticketsID) return message.channel.send(ticketChanErrEmbed).then(msg => msg.delete({timeout: 5000}));
-
 
     let messages = new Discord.Collection();
         let channelMessages = await message.channel.messages.fetch({ limit: 100 }).catch(err => console.log(err));
@@ -895,15 +896,14 @@ module.exports.run = async (bot, message, args) => {
     });
 
 
-    if(!logChannel) return message.channel.send("Logging channel does not exist!");
+    if(!logChannel) return message.channel.send("`#ticket-logs` doesn't exist, please make a channel with that name!");
 
     // Sending logs to #ticket-logs
     logChannel.send(LogChannelEmbedTicketClose);
     logChannel.send('', { files: [transFile] });
     // Sending logs to the ticker opener, if the channel topic didn't get set then it'll just delete the channel
     if(!ticketOwner) return message.channel.delete();
-    ticketOwner.send(DMembedTicketClose);
-    ticketOwner.send('', { files: [transFile] });
+    ticketOwner.send(DMembedTicketClose).then(ticketOwner.send('', { files: [transFile] })).catch(error)
     
     
     setTimeout(() => {cooldown.delete(ticketOwner.id)}, 270);
