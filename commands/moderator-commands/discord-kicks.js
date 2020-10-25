@@ -14,7 +14,12 @@ module.exports.run = async (bot, message, args) => {
      .setDescription("Provide the user's @!")
      .addField("Usage:", "```!dkick <@user> <reason>```")
      .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
-     if(!kickedUser) return message.reply(noUserErrEmbed).then(msg => msg.delete({timeout: 5000}));
+     
+     if(!kickedUser) {
+         message.delete()
+         message.channel.send(noUserErrEmbed).then(msg => msg.delete({timeout: 6000}));
+         return ;
+     }
     ;
     const noReasonErrEmbed = new Discord.MessageEmbed()
     .setColor('FF6961')
@@ -22,7 +27,12 @@ module.exports.run = async (bot, message, args) => {
     .setDescription("Provide the kick reason!")
     .addField("Usage:", "```!dkick <@user> <reason>```")
     .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
-    if(!args[1]) return message.reply(noReasonErrEmbed).then(msg => msg.delete({timeout: 6000}));
+    if(!args[1]) {
+        message.delete()
+        message.channel.send(noReasonErrEmbed).then(msg => msg.delete({timeout: 5000}));
+        return ;
+
+    }
    ;
     const noPermsErrEmbed = new Discord.MessageEmbed()
      .setColor('FF6961')
@@ -55,7 +65,7 @@ module.exports.run = async (bot, message, args) => {
          .setFooter(bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
          .setColor('#fdfd96')
         ;
-        kickedUser.send(kickEmbed).then(() => { 
+        kickedUser.send(kickEmbed).catch(Error).then(() => { 
             message.mentions.members.first().kick(kickedUser, {reason: mentionMessage})});
         logChannel.send(kickLogEmbed);
     })

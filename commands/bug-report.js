@@ -40,11 +40,12 @@ module.exports.run = async (bot, message, args) => {
   const bugErrEmbed = new Discord.MessageEmbed()
     .setColor('FF6961')
     .setTitle("**error!**")
-    .addField("use the correct format: `!bug-report <name of bug> | <what is the bug, where does it happen, how does it happen>`", "*If you need help do: `!bug-report-help`.*")
+    .addField("Use the correct format", "```!bug-report <name of bug> | <what is the bug, where does it happen, how does it happen>```")
+    .addField("Need more help?", "`!bug-report-help`")
     .setTimestamp()
     .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
   
-  if (args.length >= 1) {
+  if (args.length >= 3) {
       message.delete()
       bugReportsChannel.send(detailsEmbed).then(botCommandsChannel.send(tyBugEmbed));
     } 
