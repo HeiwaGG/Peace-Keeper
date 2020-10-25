@@ -7,8 +7,6 @@ bot.commands = new Discord.Collection();
   const racicalWords = require('./chat-filters/racicalWords.json');
   const toxicityWords = require('./chat-filters/toxicityWords.json');
   const linksWords = require('./chat-filters/linkWords.json');
-  const mongo = require('./indiscriminate/mongo');
-  const { Mongoose } = require("mongoose");
 
 // File Loaders
  // Commands
@@ -46,25 +44,7 @@ bot.commands = new Discord.Collection();
   });
 
 });
- // MongoDB
- fs.readdir("./indiscriminate/", (err, files) => {
-
-  if(err) console.log(err);
-
-  let jsfile = files.filter(f => f.split(".").pop() === "js")
-  if(jsfile.length <= 0){
-    console.log("There are no .js files in this directory...");
-    return;
-  }
-
-  jsfile.forEach((f) =>{
-    let props = require(`./indiscriminate/${f}`);
-    console.log(`${f} loaded!`);
-    bot.commands.set(props.help.name, props);
-  });
-
-});
-
+ 
 
 // Command Hanlders & anti-DMing
 bot.on('message', message => {
@@ -151,7 +131,7 @@ bot.on('guildCreate', guild  => {
   .addField("Bot?", member.user.bot, true)
   .setFooter(bot.user.username, bot.user.displayAvatarURL({dynamic: true, size: 1024}))
   .setTimestamp()
-  .setColor('#ABDFF2')
+  .setColor('#B5EAD7')
   logChannel.send(joinEmbed);
 });
 
@@ -168,7 +148,7 @@ bot.on('guildCreate', guild  => {
   .addField("Status:", member.presence.status, true)
   .addField("Bot?", member.user.bot, true)
   .setFooter(bot.user.username, bot.user.displayAvatarURL({dynamic: true, size: 1024}))
-  .setColor('#007FBD')
+  .setColor('#2a3b90')
   logChannel.send(leaveEmbed);
 });
 
@@ -180,13 +160,13 @@ bot.on('guildCreate', guild  => {
   
   let editEmbed = new Discord.MessageEmbed()
   .setTitle("**A message was edited...**")
-  .setDescription("By: " + `<@${oldMessage.author.id}>` + "," + " in channel: " + `${oldMessage.channel}`)
+  .setDescription("Author:  " + `<@${oldMessage.author.id}>` + "," + " in channel: " + `${oldMessage.channel}`)
   .setTimestamp()
   .addField("Before:", '"*'+`${oldMessage.content}`+'*"' , false)
   .addField("After:", '"*'+`${newMessage.content}`+'*"' , false)
   .setThumbnail(oldMessage.author.displayAvatarURL({dynamic: true, size: 1024}))
   .setFooter(bot.user.username, bot.user.displayAvatarURL({dynamic: true, size: 1024}))
-  .setColor('#E3E3E3')
+  .setColor('#FCEEC5')
   
   let logChannel = oldMessage.guild.channels.cache.find(channel => channel.name === 'bot-peacekeeper-logger')
   if(!logChannel) return;
@@ -204,7 +184,7 @@ bot.on('guildCreate', guild  => {
    .setThumbnail(message.author.displayAvatarURL({dynamic: true, size: 1024}))
    .addField("Message:", '"**'+`${message.content}`+'**"' + " *in channel:*" + " " + `${message.channel}`, false)
    .setFooter(bot.user.username, bot.user.displayAvatarURL({dynamic: true, size: 1024}))
-   .setColor('#E3E3E3')
+   .setColor('#9D0F01')
   ;
 
   let logChannel = message.guild.channels.cache.find(channel => channel.name === 'bot-peacekeeper-logger')
@@ -258,15 +238,6 @@ bot.on('message', message => {
 
 // Confirming the bot is running along side the MongoDB and is changing the status on discord
 bot.on('ready', async () => {
-  /*
-  await mongo().then(mongoose => {
-    try {
-      console.log("Connected to the MongoDB!")
-    } finally {
-      mongoose.connection.close()
-    }
-  })
-  */
   console.log('This bot is now online and running (ﾉ´ヮ´)ﾉ*:･ﾟ✧');
    bot.user.setActivity('heiwa.gg | !help');
 })
