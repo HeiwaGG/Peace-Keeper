@@ -13,7 +13,6 @@ module.exports.run = async (bot, message, args) => {
     .setDescription("You don't have enough permissions to do this!")
     .setTimestamp()
     .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
-    if(!message.member.hasPermission("BAN_MEMBERS")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
     ;
     const noUserErrEmbed = new Discord.MessageEmbed()
      .setColor('FF6961')
@@ -21,7 +20,6 @@ module.exports.run = async (bot, message, args) => {
      .setDescription("Provide the user's @!")
      .addField("Usage:", "```!dban <@user> <reason>```")
      .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
-     if(!bannedUser) return message.reply(noUserErrEmbed).then(msg => msg.delete({timeout: 6000}));
     ;
     const noReasonErrEmbed = new Discord.MessageEmbed()
     .setColor('FF6961')
@@ -29,7 +27,6 @@ module.exports.run = async (bot, message, args) => {
     .setDescription("Provide the ban reason!")
     .addField("Usage:", "```!dban <@user> <reason>```")
     .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
-    if(!args[1]) return message.reply(noReasonErrEmbed).then(msg => msg.delete({timeout: 6000}));
    ;
     const BanEmbed = new Discord.MessageEmbed()
      .setTitle("**Heiwa Peace Keeper**")
@@ -53,6 +50,10 @@ module.exports.run = async (bot, message, args) => {
      .setFooter(bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
      .setColor('#FF6961')
     ;
+
+    if(!message.member.hasPermission("BAN_MEMBERS")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
+    if(!bannedUser) return message.reply(noUserErrEmbed).then(msg => msg.delete({timeout: 6000}));
+    if(!args[1]) return message.reply(noReasonErrEmbed).then(msg => msg.delete({timeout: 6000}));
 
     bannedUser.send(BanEmbed).then(() => { 
         guild.members.ban(bannedUser, {reason: mentionMessage})});

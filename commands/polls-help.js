@@ -13,8 +13,7 @@ module.exports.run = async (bot, message) => {
    if(message.channel != botCommandsChannel) {
     message.delete()
     message.channel.send(wrongChannelEmbed).then(msg => msg.delete({timeout: 7000}));
-   }
-    else {   
+   } else {   
   message.delete().catch();
    let linksembed = new Discord.MessageEmbed()
    .setTitle(message.guild.name)
@@ -28,7 +27,8 @@ module.exports.run = async (bot, message) => {
    .addField("If you don't wish to add details about your suggestion leave a blank space after the '|'", 'Adding details to your suggestion is optional if it is self-explanatory such as *"fix kb"* and etc.')
    message.channel.send(linksembed).then(msg => msg.delete({timeout: 30000}));
    } 
-}
+};
+
 module.exports.help = {
-name: "polls-help"
-}
+   name: "polls-help"
+};

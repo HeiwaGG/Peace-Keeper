@@ -6,7 +6,6 @@ module.exports.run = async (bot, message, args) => {
     let generalChannel = message.guild.channels.cache.find(channel => channel.name === "general")
     let mentionMessage = message.content.slice(7)
     const kickedUser = message.mentions.users.first()
-    let punishmentArgs = args.join(" ")
 
     const noUserErrEmbed = new Discord.MessageEmbed()
     .setColor('FF6961')
@@ -14,12 +13,6 @@ module.exports.run = async (bot, message, args) => {
      .setDescription("Provide the user's @!")
      .addField("Usage:", "```!dkick <@user> <reason>```")
      .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
-     
-     if(!kickedUser) {
-         message.delete()
-         message.channel.send(noUserErrEmbed).then(msg => msg.delete({timeout: 6000}));
-         return ;
-     }
     ;
     const noReasonErrEmbed = new Discord.MessageEmbed()
     .setColor('FF6961')
@@ -27,12 +20,6 @@ module.exports.run = async (bot, message, args) => {
     .setDescription("Provide the kick reason!")
     .addField("Usage:", "```!dkick <@user> <reason>```")
     .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
-    if(!args[1]) {
-        message.delete()
-        message.channel.send(noReasonErrEmbed).then(msg => msg.delete({timeout: 5000}));
-        return ;
-
-    }
    ;
     const noPermsErrEmbed = new Discord.MessageEmbed()
      .setColor('FF6961')
@@ -40,8 +27,20 @@ module.exports.run = async (bot, message, args) => {
      .setDescription("You do not have enough permissions to do this!")
      .setTimestamp()
      .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
-    if(!message.member.hasPermission("KICK_MEMBERS")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
     ;
+
+    if(!message.member.hasPermission("KICK_MEMBERS")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
+    if(!kickedUser) {
+             message.delete()
+             message.channel.send(noUserErrEmbed).then(msg => msg.delete({timeout: 6000}));
+        return ;
+    }
+    if(!args[1]) {
+             message.delete()
+             message.channel.send(noReasonErrEmbed).then(msg => msg.delete({timeout: 5000}));
+        return ;
+    }
+ 
 
     generalChannel.createInvite({temporary: false, maxAge: 0, reason: "Kick invitation back"}).then(invite => {
         const kickEmbed = new Discord.MessageEmbed()
@@ -65,11 +64,13 @@ module.exports.run = async (bot, message, args) => {
          .setFooter(bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
          .setColor('#fdfd96')
         ;
-        kickedUser.send(kickEmbed).catch(Error).then(() => { 
-            message.mentions.members.first().kick(kickedUser, {reason: mentionMessage})});
-        logChannel.send(kickLogEmbed);
+    ;
+
+     kickedUser.send(kickEmbed).catch(Error).then(() => { 
+         message.mentions.members.first().kick(kickedUser, {reason: mentionMessage})});
+     logChannel.send(kickLogEmbed);
     })
-}
+};
 
 module.exports.help = {
     name: "dkick" 

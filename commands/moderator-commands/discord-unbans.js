@@ -10,18 +10,16 @@ module.exports.run = async (bot, message, args) => {
     const noPermsErrEmbed = new Discord.MessageEmbed()
      .setColor('FF6961')
      .setTitle("**error!**")
-     .setDescription("This command can only be used by staff!")
+     .setDescription("You do not have enough permissions to do this!")
      .setTimestamp()
      .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
-    if(!message.member.hasPermission("BAN_MEMBERS")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
     ;
     const noUserErrEmbed = new Discord.MessageEmbed()
      .setColor('FF6961')
      .setTitle("**error!**")
      .setDescription("Provide the user's ID!")
-     .addField("Usage:", "!dunban `<id>`")
+     .addField("Usage:", "```!dunban `<id>```")
      .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
-    if(!bannedUser) return message.reply(noUserErrEmbed).then(msg => msg.delete({timeout: 5000}));
     ;
     const unBanLogEmbed = new Discord.MessageEmbed()
      .setColor('90ee90')
@@ -33,6 +31,11 @@ module.exports.run = async (bot, message, args) => {
      .setThumbnail(bannedUser.displayAvatarURL({dynamic: true, size: 1024}))
      .setTimestamp()
      .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+    ;
+    
+    if(!message.member.hasPermission("BAN_MEMBERS")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
+    if(!bannedUser) return message.reply(noUserErrEmbed).then(msg => msg.delete({timeout: 5000}));
+
     guild.members.unban(bannedUser);
     logChannel.send(unBanLogEmbed);
     ;

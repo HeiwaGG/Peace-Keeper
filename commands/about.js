@@ -1,7 +1,25 @@
 const Discord = require("discord.js");
 
 module.exports.run = async (bot, message) => {
+
+       // Restricts commands to bot commands channels
+   let botCommandsChannel = message.guild.channels.cache.find(channel => channel.name === "bot-commands")
+   const wrongChannelEmbed = new Discord.MessageEmbed()
+     .setColor('#FF6961')
+     .setTitle("error!")
+     .setDescription("Wrong channel!")
+     .addField("Please keep discord bot usage in the correct channel:", `<#${botCommandsChannel.id}>`)
+     .setTimestamp()
+     .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+    ;
     
+   if(message.channel != botCommandsChannel) {
+    message.delete()
+    message.channel.send(wrongChannelEmbed).then(msg => msg.delete({timeout: 7000}));
+    return ;
+    }
+
+
     let pcImages = [
         "https://media1.tenor.com/images/4645263a7bebdaa5212d668f6fd64deb/tenor.gif?itemid=14364035",
         "https://media1.tenor.com/images/e7c24837bbe110000aec290a0b7f76eb/tenor.gif?itemid=3415967",

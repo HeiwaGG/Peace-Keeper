@@ -13,9 +13,8 @@ module.exports.run = async (bot, message, args) => {
     .setTimestamp()
     .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
   ;
-  
-  message.delete();
 
+  message.delete();
   if(message.channel != certificationChannel) {
     message.channel.send(channelEmbed).then(msg => msg.delete({timeout: 5000}))};
     

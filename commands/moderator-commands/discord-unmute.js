@@ -10,28 +10,22 @@ module.exports.run = async (bot, message, args) => {
     const noPermsErrEmbed = new Discord.MessageEmbed()
      .setColor('FF6961')
      .setTitle("**error!**")
-     .setDescription("This command can only be used by staff!")
+     .setDescription("You do not have enough permissions to do this!")
      .setTimestamp()
      .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
-    if(!message.member.hasPermission("MANAGE_ROLES")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
     ;
     const noUserErrEmbed = new Discord.MessageEmbed()
      .setColor('FF6961')
      .setTitle("**error!**")
      .setDescription("Provide the user's @!")
-     .addField("Usage:", "`!dunmute <@user>`")
+     .addField("Usage:", "```!dunmute <@user>```")
      .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
-    if(!mutedUser) return message.reply(noUserErrEmbed).then(msg => msg.delete({timeout: 5000}));
     ;
     const notMutedEmbed = new Discord.MessageEmbed()
      .setColor('FF6961')
      .setTitle("**error!**")
      .setDescription("Cant unmute a user who is already unmuted!")
      .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
-    if(!message.mentions.members.first().roles.cache.has("763781380885708820")) {
-        message.channel.send(notMutedEmbed).then(message => message.delete({timeout: 5000}))
-        return;
-        }     
     ;
     const mutedEmbed = new Discord.MessageEmbed()
      .setTitle("** Peace Keeper**")
@@ -55,7 +49,14 @@ module.exports.run = async (bot, message, args) => {
      .setColor('#90ee90')
     ;
 
-    message.mentions.members.first().roles.remove(mutedRole)
+    if(!message.member.hasPermission("MANAGE_ROLES")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
+    if(!mutedUser) return message.reply(noUserErrEmbed).then(msg => msg.delete({timeout: 5000}));
+    if(!mutedUser.roles.cache.has("763781380885708820")) {
+        message.channel.send(notMutedEmbed).then(message => message.delete({timeout: 5000}))
+        return ;
+    };     
+
+    mutedUser.roles.remove(mutedRole)
     mutedUser.send(mutedEmbed)
     logChannel.send(muteLogEmbed);
 }

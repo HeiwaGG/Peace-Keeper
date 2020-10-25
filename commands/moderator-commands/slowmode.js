@@ -39,7 +39,7 @@ module.exports.run = async (bot, message, args) => {
         message.channel.send(slowmodeRemovedEmbed).then(message => message.delete({timeout: 7000}))
         message.channel.setRateLimitPerUser(args[0]);
         return ;
-        }
+    }
 
     message.delete()
     message.channel.send(slowmodeEmbed).then(message => message.delete({timeout: 7000}))

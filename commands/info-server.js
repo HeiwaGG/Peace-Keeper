@@ -13,8 +13,7 @@ module.exports.run = async (bot, message, args) => {
    if(message.channel != botCommandsChannel) {
     message.delete()
     message.channel.send(wrongChannelEmbed).then(msg => msg.delete({timeout: 7000}));
-   }
-    else {
+   } else {
      let servericon = message.guild.iconURL({dynamic: true, size: 1024})
      let serverembed = new Discord.MessageEmbed()
      .setAuthor(message.guild.name)

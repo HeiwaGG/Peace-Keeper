@@ -15,15 +15,12 @@ module.exports.run = async (bot, message, args) => {
    .setTimestamp()
    .setFooter("Peace Keeper")
   ;
-  if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
-
   const ticketChanErrEmbed = new Discord.MessageEmbed()
    .setColor('FF6961')
    .setTitle("**error!**")
    .setDescription("This command can only be used inside ticket channels!")
    .setTimestamp()
    .setFooter("Peace Keeper")
-  if(message.channel.parentID != categoryID) return message.channel.send(ticketChanErrEmbed).then(msg => msg.delete({timeout: 5000}));
   ;
   const noUserErrEmbed = new Discord.MessageEmbed()
    .setColor('FF6961')
@@ -32,7 +29,6 @@ module.exports.run = async (bot, message, args) => {
    .addField("Command format:", "```!tadd <@user>```")
    .setTimestamp()
    .setFooter("Peace Keeper")
-  if(!mentionedUser) return message.channel.send(noUserErrEmbed).then(msg => msg.delete({timeout: 5000}));
   ;
   const Success = new Discord.MessageEmbed()
    .setColor('FF6961')
@@ -40,8 +36,12 @@ module.exports.run = async (bot, message, args) => {
    .setDescription(`<@${mentionedUser.id}>` + " has been added to this channel!")
    .setTimestamp()
    .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
-   ;
+  ;
   
+  if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
+  if(message.channel.parentID != categoryID) return message.channel.send(ticketChanErrEmbed).then(msg => msg.delete({timeout: 5000}));
+  if(!mentionedUser) return message.channel.send(noUserErrEmbed).then(msg => msg.delete({timeout: 5000}));
+
   message.channel.updateOverwrite(mentionedUser, {
     "VIEW_CHANNEL": true, 
     "SEND_MESSAGES": true, 

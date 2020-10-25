@@ -10,10 +10,9 @@ module.exports.run = async (bot, message, args) => {
     const noPermsErrEmbed = new Discord.MessageEmbed()
      .setColor('FF6961')
      .setTitle("**error!**")
-     .setDescription("This command can only be used by staff!")
+     .setDescription("You do not have enough permissions to do this!")
      .setTimestamp()
      .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
-    if(!message.member.hasPermission("MANAGE_ROLES")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
     ;
     const noUserErrEmbed = new Discord.MessageEmbed()
      .setColor('FF6961')
@@ -21,7 +20,6 @@ module.exports.run = async (bot, message, args) => {
      .setDescription("Provide the user's @!")
      .addField("Usage:", "```!dmute <@user> <reason>```")
      .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
-    if(!mutedUser) return message.reply(noUserErrEmbed).then(msg => msg.delete({timeout: 5000}));
     ;
     const noReasonErrEmbed = new Discord.MessageEmbed()
     .setColor('FF6961')
@@ -29,17 +27,12 @@ module.exports.run = async (bot, message, args) => {
     .setDescription("Provide the reason for the mute!")
     .addField("Usage:", "```!dmute <@user> <reason>```")
     .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
-   if(!args[1]) return message.reply(noReasonErrEmbed).then(msg => msg.delete({timeout: 5000}));
    ;
     const alrMutedEmbed = new Discord.MessageEmbed()
      .setColor('FF6961')
      .setTitle("**error!**")
      .setDescription("Cant mute a user who is already muted!")
-     .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
-    if(message.mentions.members.first().roles.cache.has("763781380885708820")) {
-        message.channel.send(alrMutedEmbed).then(message => message.delete({timeout: 5000}))
-        return;
-    }     
+     .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))   
     ;
     const mutedEmbed = new Discord.MessageEmbed()
      .setTitle("**Peace Keeper**")
@@ -62,7 +55,15 @@ module.exports.run = async (bot, message, args) => {
      .setColor('#fdfd96')
     ;
 
-    message.mentions.members.first().roles.add(mutedRole)
+    if(!message.member.hasPermission("MANAGE_ROLES")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
+    if(!mutedUser) return message.reply(noUserErrEmbed).then(msg => msg.delete({timeout: 5000}));
+    if(!args[1]) return message.reply(noReasonErrEmbed).then(msg => msg.delete({timeout: 5000}));
+    if(mutedUser.roles.cache.has(mutedRole)) {
+        message.channel.send(alrMutedEmbed).then(message => message.delete({timeout: 5000}))
+        return ;
+    }  
+
+    mutedUser.roles.add(mutedRole)
     mutedUser.send(mutedEmbed)
     logChannel.send(muteLogEmbed);
 }

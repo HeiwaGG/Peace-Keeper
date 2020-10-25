@@ -34,32 +34,32 @@ function correctTime(timestamp) {
 
 module.exports.run = async (bot, message, args) => {
 
-    let ticketOwner = bot.users.cache.get(message.channel.topic);
-
     const noPermsErrEmbed = new Discord.MessageEmbed()
-    .setColor('FF6961')
-    .setTitle("**error!**")
-    .setDescription("This command can only be used by staff!")
-    .setTimestamp()
-    .setFooter("Peace Keeper")
-    if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
-
+     .setColor('FF6961')
+     .setTitle("**error!**")
+     .setDescription("This command can only be used by staff!")
+     .setTimestamp()
+     .setFooter("Peace Keeper")
+    ;
     const usage = new Discord.MessageEmbed()
-    .setColor('FF6961')
-    .setTitle("**error!**")
-    .addField("Usage", "`!transcript <number>`")
-    .addField("Note: Due to discord API limitation: ", "*You can't collat more than 100 messages at a time!*")
-    .setTimestamp()
-    .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+     .setColor('FF6961')
+     .setTitle("**error!**")
+     .addField("Usage", "`!transcript <number>`")
+     .addField("Note: Due to discord API limitation: ", "*You can't collat more than 100 messages at a time!*")
+     .setTimestamp()
+     .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+    ; 
+    const limitErrEmbed = new Discord.MessageEmbed()
+     .setColor('FF6961')
+     .setTitle("**error!**")
+     .setDescription("You can't collat more than 100 messages!")
+     .setTimestamp()
+     .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+    ;
+
+    if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
     if(!args[0]) return message.reply(usage).then(msg => msg.delete({timeout: 5000}));
     if(isNaN(args[0])) return message.reply(usage).then(msg => msg.delete({timeout: 8000}));
-
-    const limitErrEmbed = new Discord.MessageEmbed()
-    .setColor('FF6961')
-    .setTitle("**error!**")
-    .setDescription("You can't collat more than 100 messages!")
-    .setTimestamp()
-    .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
     if(args[0] > 100) return message.reply(limitErrEmbed).then(msg => msg.delete({timeout: 5000}));
 
     
@@ -865,14 +865,14 @@ fs.writeFile(`./indiscriminate/transcripts/` + message.channel.name + ".html", h
     let transFile = `./indiscriminate/transcripts/${message.channel.name}.html`;
 
     const transcriptEmbed = new Discord.MessageEmbed()
-    .setColor('#ABDFF2')
-    .setTitle("Peace Keeper Transcripts")
-    .setDescription(`Here is your requested transcript from ${message.guild.name}'s discord server!`)
-    .addField("From channel: ", "`#" + message.channel.name + "`")
-    .setTimestamp()
-    .setThumbnail(message.guild.iconURL())
-    .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
-    
+     .setColor('#ABDFF2')
+     .setTitle("Peace Keeper Transcripts")
+     .setDescription(`Here is your requested transcript from ${message.guild.name}'s discord server!`)
+     .addField("From channel: ", "`#" + message.channel.name + "`")
+     .setTimestamp()
+     .setThumbnail(message.guild.iconURL())
+     .setFooter(message.author.tag + " | Peace Keeper", message.author.displayAvatarURL({dynamic: true, size: 1024}))
+    ;
     message.author.send(transcriptEmbed).then (() => {
         message.author.send('', { files: [transFile] });
     });
