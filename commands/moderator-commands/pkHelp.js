@@ -18,7 +18,7 @@ module.exports.run = async (bot, message, args) => {
       const helpopEmbed = new Discord.MessageEmbed()
        .setColor('#ABDFF2')
        .setTitle("**Helpop Request Received...**")
-       .setDescription("```" + `${args[0]}` + "```")
+       .setDescription("```" + `${message.content.slice()}` + "```")
        .addField("From:", message.guild.name, true)
        .addField("Author:", message.author.username, true)
        .setTimestamp()
