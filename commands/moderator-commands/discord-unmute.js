@@ -51,7 +51,7 @@ module.exports.run = async (bot, message, args) => {
 
     if(!message.member.hasPermission("MANAGE_ROLES")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
     if(!mutedUser) return message.reply(noUserErrEmbed).then(msg => msg.delete({timeout: 5000}));
-    if(!mutedUser.roles.cache.has("763781380885708820")) {
+    if(!mutedUser.roles.cache.has(mutedRole)) {
         message.channel.send(notMutedEmbed).then(message => message.delete({timeout: 5000}))
         return ;
     };     
@@ -59,7 +59,7 @@ module.exports.run = async (bot, message, args) => {
     mutedUser.roles.remove(mutedRole)
     mutedUser.send(mutedEmbed)
     logChannel.send(muteLogEmbed);
-}
+};
 
 module.exports.help = {
     name: "dunmute" 
