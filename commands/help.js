@@ -64,17 +64,26 @@ module.exports.run = async (bot, message, args) => {
   
     if(message.member.permissions.has("ADMINISTRATOR")) {
       const filter = (reaction, user) => reaction.emoji.name === '⬇️' && user.id === message.author;
+
       message.channel.send(helpAdminEmbed).then(message => message.react('⬇️'))
-    message.awaitReaction(filter, {timeout: 30000})
+      message.awaitReactions(filter, { max: 1, time: 5000, errors: ['time'] })
+      .then(collected => {
+          const reaction = collected.first();
+  
+          if (reaction.emoji.name === '⬇️') {
+              message.reply('you reacted with a thumbs up.');
+          }
+          else {
+              message.reply('you reacted with a thumbs down.');
+          }
+      })
+    return ;
     }
 
     if(message.member.roles.cache.find(role => role.name === 'Staff')) {
       message.channel.send(helpStaffEmbed)
     }
-    if(!message.member.roles.cache.find(role => role.name === 'Staff')) return message.channel.send(helpMembersEmbed);
-      
-  
-    
+    if(!message.member.roles.cache.find(role => role.name === 'Staff')) return message.channel.send(helpMembersEmbed);    
   }
 };
 
