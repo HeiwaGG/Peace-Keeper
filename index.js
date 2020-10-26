@@ -255,7 +255,6 @@ process.on('unhandledRejection', (error, message) => {
    .setFooter(bot.user.id + " | " + bot.user.username, bot.user.displayAvatarURL({dynamic: true, size: 1024}))
   ;
   loggingChannel.send(errorEmbed)
-  loggingChannel.send(mentionAymhh).then(message => message.delete())
   console.error('Unhandled promise rejection:', error)
 });
 bot.on('error', (err, message) => {

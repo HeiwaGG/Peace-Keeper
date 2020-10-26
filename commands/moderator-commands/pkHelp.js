@@ -18,11 +18,12 @@ module.exports.run = async (bot, message, args) => {
       const helpopEmbed = new Discord.MessageEmbed()
        .setColor('#ABDFF2')
        .setTitle("**Helpop Request Received...**")
-       .setDescription("```" + `${message.content.slice()}` + "```")
+       .setDescription("```" + `${message.content.slice(8)}` + "```")
        .addField("From:", message.guild.name, true)
-       .addField("Author:", message.author.username, true)
+       .addField("Author:", message.author.tag, true)
+       .setThumbnail(message.guild.iconURL({dynamic: true, size: 1024}))
        .setTimestamp()
-       .setFooter(message.author.tag + " | " + message.guild.name, message.author.displayAvatarURL({dynamic: true, size: 1024}))
+       .setFooter(message.author.id + " | " + message.guild.name, message.author.displayAvatarURL({dynamic: true, size: 1024}))
       bot.channels.cache.get('769578830607941633').send(helpopEmbed).then(
         bot.channels.cache.get('769578830607941633').send(mentionAymhh).then(message => message.delete())
       );
