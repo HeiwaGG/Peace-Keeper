@@ -62,10 +62,15 @@ module.exports.run = async (bot, message, args) => {
      .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
     ;
   
-    if(message.member.permissions.has("ADMINISTRATOR")) return message.channel.send(helpAdminEmbed);
+    if(message.member.permissions.has("ADMINISTRATOR")) {
+      const filter = (reaction, user) => reaction.emoji.name === '⬇️' && user.id === message.author;
+      message.channel.send(helpAdminEmbed).then(message => message.react('⬇️'))
+    message.awaitReaction(filter, {timeout: 30000})
+    }
 
-    if(message.member.roles.cache.find(role => role.name === 'Staff')) return message.channel.send(helpStaffEmbed).then(message => message.react('⬇️'));
-
+    if(message.member.roles.cache.find(role => role.name === 'Staff')) {
+      message.channel.send(helpStaffEmbed)
+    }
     if(!message.member.roles.cache.find(role => role.name === 'Staff')) return message.channel.send(helpMembersEmbed);
       
   
@@ -75,4 +80,4 @@ module.exports.run = async (bot, message, args) => {
 
 module.exports.help = {
   name: "help"
-};
+}
