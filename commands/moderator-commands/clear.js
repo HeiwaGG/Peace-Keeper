@@ -67,7 +67,7 @@ module.exports.run = async (bot, message, args) => {
   
    // Transcript
   let messages = new Discord.Collection();
-  let channelMessages = await message.channel.messages.fetch({ limit: args[0] }).catch(err => console.log(err));
+  let channelMessages = await message.channel.messages.fetch({ limit: args[0] }).catch(error => console.log(error));
   messages = messages.concat(channelMessages);
   let maxcatch = 0
   while (channelMessages.size === args[0]) {
