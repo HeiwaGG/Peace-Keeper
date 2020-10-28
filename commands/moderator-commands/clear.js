@@ -55,7 +55,7 @@ module.exports.run = async (bot, message, args) => {
    .setColor('FF6961')
    .setTitle("**error!**")
    .addField("Usage", "```!clear <number>```")
-   .addField("Note: Due to discord API limitation: ", "*You can't clear more than 100 messages at a time!* \n You can't delete messages that are under 14 days old.")
+   .addField("Note: Due to discord API limitation: ", "*You can't clear more than 100 messages at a time! \n You can't delete messages that are under 14 days old.*")
    .setTimestamp()
    .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
    
@@ -63,6 +63,7 @@ module.exports.run = async (bot, message, args) => {
   if(!args[0]) return message.reply(usage).then(msg => msg.delete({timeout: 8000}));
   if(isNaN(args[0])) return message.reply(usage).then(msg => msg.delete({timeout: 8000}));
   if(args[0] > 100) return message.reply(usage).then(msg => msg.delete({timeout: 8000}));
+  if(error) return message.reply(usage).then(msg => msg.delete({timeout: 8000}));
   
    // Transcript
   let messages = new Discord.Collection();
