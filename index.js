@@ -160,7 +160,7 @@ bot.on('guildCreate', guild  => {
   
   let editEmbed = new Discord.MessageEmbed()
   .setTitle("**A message was edited...**")
-  .setDescription("Author:  " + `<@${oldMessage.author.id}>` + "," + " in channel: " + `${oldMessage.channel}`)
+  .setDescription("Author: ` " + `<@${oldMessage.author.id}>` + "," + " in channel: " + `${oldMessage.channel}`)
   .setTimestamp()
   .addField("Before:", '"*'+`${oldMessage.content}`+'*"' , false)
   .addField("After:", '"*'+`${newMessage.content}`+'*"' , false)
