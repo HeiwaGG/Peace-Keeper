@@ -34,7 +34,7 @@ function correctTime(timestamp) {
 
 module.exports.run = async (bot, message, args) => {
 
-    const ticketsCategory = message.guild.channels.cache.find(c => c.name.includes("Tickets") && c.type === "category")
+    const ticketsCategory = message.guild.channels.cache.find(c => c.name.includes("Support") && c.type === "category")
     const ticketsID = ticketsCategory.id
 
     let cooldown = new Set();
@@ -903,15 +903,11 @@ module.exports.run = async (bot, message, args) => {
     logChannel.send('', { files: [transFile] });
     // Sending logs to the ticker opener, if the channel topic didn't get set then it'll just delete the channel
     if(!ticketOwner) return message.channel.delete();
-<<<<<<< Updated upstream
-    ticketOwner.send(DMembedTicketClose).then(ticketOwner.send('', { files: [transFile] })).catch(error)
-=======
     if(Error) {
         logChannel.send(`Couldn't send message to ${ticketOwner.username}`)
         console.log(`Couldn't send ticket log to ${ticketOwner.username}`)
     }
     ticketOwner.send(DMembedTicketClose).then(ticketOwner.send('', { files: [transFile] }))
->>>>>>> Stashed changes
     
     
     setTimeout(() => {cooldown.delete(ticketOwner.id)}, 270);

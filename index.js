@@ -16,7 +16,7 @@ bot.commands = new Discord.Collection();
 
   let jsfile = files.filter(f => f.split(".").pop() === "js")
   if(jsfile.length <= 0){
-    console.log("There are no .js files in this directory...");
+    console.log("There are no .js files in the commands directory...");
     return;
   }
 
@@ -33,7 +33,7 @@ bot.commands = new Discord.Collection();
 
   let jsfile = files.filter(f => f.split(".").pop() === "js")
   if(jsfile.length <= 0){
-    console.log("Couldn't find moderator-commands folder.");
+    console.log("There are no .js files in the moderator-commands directory...");
     return;
   }
 
@@ -44,7 +44,25 @@ bot.commands = new Discord.Collection();
   });
 
 });
+ fs.readdir("./commands/moderator-commands/voice-elements/", (err, files) => {
+
+  if(err) console.log(err);
+
+  let jsfile = files.filter(f => f.split(".").pop() === "js")
+  if(jsfile.length <= 0){
+    console.log("There are no .js files in the voice-elements directory...");
+    return;
+  }
+
+  jsfile.forEach((f) =>{
+    let props = require(`./commands/moderator-commands/voice-elements/${f}`);
+    console.log(`${f} loaded!`);
+    bot.commands.set(props.help.name, props);
+  });
+
+});
  
+
 
 // Command Hanlders & anti-DMing
 bot.on('message', message => {
@@ -193,6 +211,7 @@ bot.on('guildCreate', guild  => {
   if(message.author.bot) return;
   logChannel.send(deleteEmbed);
 });
+
 
 // Words filters
 bot.on('message', message => {
