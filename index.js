@@ -3,7 +3,7 @@ const fs = require("fs");
 const bot = new Discord.Client();
 bot.commands = new Discord.Collection();
 
-  const { prefix, token }  = require("./indiscriminate/config.json");
+  const { prefix, token,  }  = require("./indiscriminate/config.json");
   const racicalWords = require('./chat-filters/racicalWords.json');
   const toxicityWords = require('./chat-filters/toxicityWords.json');
   const linksWords = require('./chat-filters/linkWords.json');
