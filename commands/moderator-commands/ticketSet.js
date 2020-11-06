@@ -2,13 +2,15 @@ const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
    // Setups 
-    const categoryID = message.guild.channels.cache.find(c => c.name.includes("Tickets") && c.type === "category").id
-    let mentionedUser = message.mentions.users.first()
-  
+   const supportCategory = message.guild.channels.cache.find(c => c.name.includes("Support") && c.type === "category")
+   let supportCategoryid = supportCategory.id
+   let mentionedUser = message.mentions.users.first()
+   let ticketargs = args.slice(0).join(" ").split('|');
+  ;
    const noPermsErrEmbed = new Discord.MessageEmbed()
    .setColor('FF6961')
    .setTitle("**error!**")
-   .setDescription("You don't have enought permissions to do this!")
+   .setDescription("You don't have enough permissions to do this!")
    .setTimestamp()
    .setFooter("Peace Keeper")
   ;
@@ -40,18 +42,15 @@ module.exports.run = async (bot, message, args) => {
    .setDescription("This ticket already belongs to that user!")
    .setTimestamp()
    .setFooter("Peace Keeper")
-  ;
+  ;  
   
-  if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply(noPermsErrEmbed).then(msg => msg.delete({timeout: 5000}));
-  if(message.channel.parentID != categoryID) return message.channel.send(ticketChanErrEmbed).then(msg => msg.delete({timeout: 5000}));
-  if(!mentionedUser) return message.channel.send(noUserErrEmbed).then(msg => msg.delete({timeout: 5000}));
-  if(message.channel.topic === mentionedUser.id && message.channel.name === `ticket-${mentionedUser.username}`) return message.channel.send(noNeedEmbed);
-  
-  message.channel.setTopic(mentionedUser.id).then(message.channel.setName("ticket-" + mentionedUser.username, ["Make ticket subject to another user."]))
+  if(!message.member.hasPermission('MANAGE_MESSAGES')) return message.reply(noPermsErrEmbed)
+  if(message.channel.id !== supportCategoryid) return message.reply(ticketChanErrEmbed)
+  if(!mentionedUser) return message.reply(noUserErrEmbed)
+
   message.channel.send(Success)
 }
  
 module.exports.help = {
-  name: "tset",
-  description: "to set a ticket to a different user."
+  name: "tset"
 }
