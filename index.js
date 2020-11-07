@@ -44,25 +44,7 @@ bot.commands = new Discord.Collection();
   });
 
 });
- fs.readdir("./commands/moderator-commands/voice-elements/", (err, files) => {
-
-  if(err) console.log(err);
-
-  let jsfile = files.filter(f => f.split(".").pop() === "js")
-  if(jsfile.length <= 0){
-    console.log("There are no .js files in the voice-elements directory...");
-    return;
-  }
-
-  jsfile.forEach((f) =>{
-    let props = require(`./commands/moderator-commands/voice-elements/${f}`);
-    console.log(`${f} loaded!`);
-    bot.commands.set(props.help.name, props);
-  });
-
-});
  
-
 
 // Command Hanlders & anti-DMing
 bot.on('message', message => {
@@ -263,7 +245,7 @@ bot.on('ready', async () => {
 
 // Error catching
 process.on('unhandledRejection', (error, message) => { 
-  var mentionAymhh = "<@176610715686273024>"
+  const bot = "730379402273357825"
   var loggingChannel = bot.channels.cache.get("768004556889784321")
   var errorEmbed = new Discord.MessageEmbed()
    .setColor('FF6961')
@@ -276,7 +258,7 @@ process.on('unhandledRejection', (error, message) => {
   loggingChannel.send(errorEmbed)
   console.error('Unhandled promise rejection:', error)
 });
-bot.on('error', (err, message) => {
+bot.on('error', (err, message, bot) => {
   var mentionAymhh = "<@176610715686273024>"
   var loggingChannel = bot.channels.cache.get("768004556889784321")
   var errorEmbed = new Discord.MessageEmbed()
