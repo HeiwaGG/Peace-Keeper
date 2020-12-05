@@ -48,7 +48,7 @@ module.exports.run = async (bot, message, args) => {
   if(message.channel.id !== supportCategoryid) return message.reply(ticketChanErrEmbed)
   if(!mentionedUser) return message.reply(noUserErrEmbed)
 
-  message.channel.send(Success)
+  return message.channel.send(Success)
 }
  
 module.exports.help = {

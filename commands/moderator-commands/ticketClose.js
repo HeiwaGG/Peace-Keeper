@@ -911,7 +911,7 @@ module.exports.run = async (bot, message, args) => {
     
     
     setTimeout(() => {cooldown.delete(ticketOwner.id)}, 270000);
-    message.channel.delete(); 
+    return message.channel.delete(); 
 }
  
 module.exports.help = {

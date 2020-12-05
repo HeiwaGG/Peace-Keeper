@@ -265,7 +265,7 @@ bot.on('error', (err, message, bot) => {
    .setColor('FF6961')
    .setTitle("error!")
    .setDescription("An error has occured!")
-   .addField("Issue: ", "```" + error + "```")
+   .addField("Issue:", `\`\`\`${error}\`\`\``)
    .setTimestamp()
    .setFooter(bot.user.id + " | " + bot.user.username, bot.user.displayAvatarURL({dynamic: true, size: 1024}))
   ;
