@@ -4,6 +4,7 @@ module.exports.run = async (bot, message, args) => {
   // Restricts commands to bot commands channels
   let botCommandsChannel = message.guild.channels.cache.find(channel => channel.name === "bot-commands")
   let suggestionsChannel = message.guild.channels.cache.find(channel => channel.name === "suggestions")
+  const reactionFilter = (reaction, user) => reaction && user.id === message.author.id
   const wrongChannelEmbed = new Discord.MessageEmbed()
     .setColor('#FF6961')
     .setTitle("error!")
@@ -14,9 +15,10 @@ module.exports.run = async (bot, message, args) => {
   ;
   if(message.channel != botCommandsChannel) {
    message.delete()
-   message.channel.send(wrongChannelEmbed).then(msg => msg.delete({timeout: 7000}));
-  } else {
-    let helpMembersEmbed = new Discord.MessageEmbed()
+   return message.channel.send(wrongChannelEmbed).then(msg => msg.delete({timeout: 7000}));
+  }  
+
+   let helpMembersEmbed = new Discord.MessageEmbed()
      .setTitle(`Peace Keeper Help Menu`)
      .setDescription("All the possible commands you can do you can do!\n*Reminder that these are all case sensitive commands!*")
      .addField("`!topen`", "Opens a new support ticket.")
@@ -25,6 +27,7 @@ module.exports.run = async (bot, message, args) => {
      .addField("`!sinfo`", "Tell's you the discord server information.")
      .addField("`!uinfo`", "Tell's you your discord account information or someone else's.")
      .addField("`!about`", "Information about the creator of this bot!")
+     .addField("Want to go to the next page?", "React with anything!")
      .setThumbnail(message.guild.iconURL({dynamic: true, size: 1024}))
      .setTimestamp()
      .setColor('#ABDFF2')
@@ -55,36 +58,13 @@ module.exports.run = async (bot, message, args) => {
      .addField("`!anc`", "Sends announcment message in an embed format (No mentions).")
      .addField('`!special-anc`', `Sends announcment message in an embed format with an image of your choice (No mentions).`)
      .addField("`!pkHelp`", "Sends a helpop message to the author of this bot!")
-     .addField("Want to view the member's help menu?", "Click the ️⬇️ below!")
      .setThumbnail(message.guild.iconURL({dynamic: true, size: 1024}))
      .setTimestamp()
      .setColor('#ABDFF2')
      .setFooter(message.author.tag + " | " + bot.user.username, message.author.displayAvatarURL({dynamic: true, size: 1024}))
     ;
   
-    if(message.member.permissions.has("ADMINISTRATOR")) {
-      const filter = (reaction, user) => reaction.emoji.name === '⬇️' && user.id === message.author;
-
-      message.channel.send(helpAdminEmbed).then(message => message.react('⬇️'))
-      message.awaitReactions(filter, { max: 1, time: 5000, errors: ['time'] })
-      .then(collected => {
-          const reaction = collected.first();
-  
-          if (reaction.emoji.name === '⬇️') {
-              message.reply('you reacted with a thumbs up.');
-          }
-          else {
-              message.reply('you reacted with a thumbs down.');
-          }
-      })
-    return ;
-    }
-
-    if(message.member.roles.cache.find(role => role.name === 'Staff')) {
-      message.channel.send(helpStaffEmbed)
-    }
-    if(!message.member.roles.cache.find(role => role.name === 'Staff')) return message.channel.send(helpMembersEmbed);    
-  }
+  const membersEmbed = await message.channel.send(helpMembersEmbed)
 };
 
 module.exports.help = {

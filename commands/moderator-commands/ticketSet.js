@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
    // Setups 
-   const supportCategory = message.guild.channels.cache.find(c => c.name.includes("Support") && c.type === "category")
+   const supportCategory = message.guild.channels.cache.get("726420745944563784")
    let supportCategoryid = supportCategory.id
    let mentionedUser = message.mentions.users.first()
    let ticketargs = args.slice(0).join(" ").split('|');
@@ -45,7 +45,7 @@ module.exports.run = async (bot, message, args) => {
   ;  
   
   if(!message.member.hasPermission('MANAGE_MESSAGES')) return message.reply(noPermsErrEmbed)
-  if(message.channel.id !== supportCategoryid) return message.reply(ticketChanErrEmbed)
+  if(message.channel.id !== "726420745944563784") return message.reply(ticketChanErrEmbed)
   if(!mentionedUser) return message.reply(noUserErrEmbed)
 
   return message.channel.send(Success)

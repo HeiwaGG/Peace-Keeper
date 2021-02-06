@@ -243,36 +243,6 @@ bot.on('ready', async () => {
    bot.user.setActivity('heiwa.gg | !help');
 })
 
-// Error catching
-process.on('unhandledRejection', (error, message) => { 
-  const bot = "730379402273357825"
-  var loggingChannel = bot.channels.cache.get("768004556889784321")
-  var errorEmbed = new Discord.MessageEmbed()
-   .setColor('FF6961')
-   .setTitle("error!")
-   .setDescription("An error has occured!")
-   .addField("Issue: ", "```" + error + "```")
-   .setTimestamp()
-   .setFooter(bot.user.id + " | " + bot.user.username, bot.user.displayAvatarURL({dynamic: true, size: 1024}))
-  ;
-  loggingChannel.send(errorEmbed)
-  console.error('Unhandled promise rejection:', error)
-});
-bot.on('error', (err, message, bot) => {
-  var mentionAymhh = "<@176610715686273024>"
-  var loggingChannel = bot.channels.cache.get("768004556889784321")
-  var errorEmbed = new Discord.MessageEmbed()
-   .setColor('FF6961')
-   .setTitle("error!")
-   .setDescription("An error has occured!")
-   .addField("Issue:", `\`\`\`${error}\`\`\``)
-   .setTimestamp()
-   .setFooter(bot.user.id + " | " + bot.user.username, bot.user.displayAvatarURL({dynamic: true, size: 1024}))
-  ;
-  message.reply("Something went wrong! I have reported this to my creator!")
-  loggingChannel.send(errorEmbed)
-  loggingChannel.send(mentionAymhh).then(message => message.delete())
-  console.error('Unhandled promise rejection:', err) 
-})
+
 
 bot.login(token);
