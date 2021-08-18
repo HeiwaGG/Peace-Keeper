@@ -5,3 +5,6 @@ Bot will not workout with the /indiscriminate/ directory, follow the errors to s
 > Prefix,
 > Token and 
 > Transcript locators
+
+Server for the bot
+> https://discord.new/e4rPDNuHHZRW
